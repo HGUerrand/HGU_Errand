@@ -10,10 +10,7 @@
 <br/>
 <a href="hello-servlet">Hello Servlet</a>
 
-<a href="<%= request.getContextPath() %>/errand/list"
-   style="display:inline-block; padding:12px 16px; background:#111827; color:white;
-          border-radius:10px; text-decoration:none; font-weight:600;">
-    go to list →
+<a href="<%= request.getContextPath() %>/errand/list">Go to List</a>
 </a>
 </body>
 </html>
