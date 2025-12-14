@@ -10,6 +10,12 @@
 
     <mvc:annotation-driven />
 
+    <!-- 정적 리소스(/assets/**) 허용 -->
+    <mvc:resources mapping="/assets/**" location="/assets/" />
+
+    <!-- DispatcherServlet이 처리 못한 요청은 Tomcat 기본 서블릿에게 넘김 -->
+    <mvc:default-servlet-handler />
+
     <!-- 너 패키지명 기준으로 스캔 -->
     <context:component-scan base-package="com.hguerrand"/>
 
