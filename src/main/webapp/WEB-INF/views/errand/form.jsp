@@ -10,7 +10,7 @@
 </head>
 
 <body>
-<div class="container">
+<div class="container narrow">
 
     <div class="topbar">
         <div class="brand">
@@ -20,13 +20,19 @@
                 <p class="subtitle">필수만 먼저 입력해도 OK 🎄</p>
             </div>
         </div>
-
         <div class="actions">
             <a class="btn" href="<%=request.getContextPath()%>/errand/list">목록</a>
         </div>
     </div>
 
-    <form class="formCard" method="post" action="<%=request.getContextPath()%>/errand/create">
+    <!-- ✅ multipart -->
+    <form class="formCard" method="post"
+          action="<%=request.getContextPath()%>/errand/create"
+          enctype="multipart/form-data">
+
+        <label class="label">작성자 이름</label>
+        <input class="input" name="writerName" placeholder="예) 김한동" />
+
         <label class="label">제목</label>
         <input class="input" name="title" placeholder="예) 프린트물 대신 뽑아주기" required />
 
@@ -52,8 +58,15 @@
             </div>
         </div>
 
+        <label class="label">상세 설명</label>
+        <textarea class="textarea" name="description" rows="5"
+                  placeholder="예) 올네이션스홀 근처 편의점에서 아이스 아메리카노 1잔 사다주세요!"></textarea>
+
         <label class="label">해시태그 (콤마로 구분)</label>
         <input class="input" name="hashtags" placeholder="#급함,#가벼움" />
+
+        <label class="label">사진 업로드 (선택)</label>
+        <input class="input" type="file" name="image" accept="image/*" />
 
         <div class="formActions">
             <a class="btn" href="<%=request.getContextPath()%>/errand/list">취소</a>

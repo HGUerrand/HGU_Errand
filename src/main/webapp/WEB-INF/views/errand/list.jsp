@@ -54,9 +54,10 @@
     </div>
 
     <!-- Grid -->
-    <div class="grid">
+    <div class="errand-grid">
         <c:forEach var="e" items="${errands}">
-            <div class="card ${e.status eq '완료' ? 'doneCard' : ''}">
+            <a class="card ${e.status eq '완료' ? 'doneCard' : ''}"
+               href="<%=request.getContextPath()%>/errand/detail?id=${e.id}">
 
                 <!-- 상단: 가격 + 오른쪽 상단 배지(예약/완료만) -->
                 <div class="topRight">
@@ -101,7 +102,7 @@
                     <span>${e.createdAt}</span>
                 </div>
 
-            </div>
+            </a>
         </c:forEach>
     </div>
 
