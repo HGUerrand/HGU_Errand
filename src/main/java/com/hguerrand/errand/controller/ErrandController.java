@@ -23,6 +23,8 @@ public class ErrandController {
             put("time", "오늘 19:00");
             put("status", "모집중");
             put("tag", "급함");
+            put("createdAt", "10분 전"); // 또는 "2025-12-14 21:10"
+            put("hashtags", Arrays.asList("#급함", "#가벼움")); // 글마다 다르게
         }});
 
         errands.add(new HashMap<String, Object>() {{
@@ -31,8 +33,10 @@ public class ErrandController {
             put("from", "도서관");
             put("to", "느헤미야홀");
             put("time", "내일 10:30");
-            put("status", "모집중");
+            put("status", "예약");
             put("tag", "가벼움");
+            put("createdAt", "3일 전"); // 또는 "2025-12-14 21:10"
+            put("hashtags", Arrays.asList("#가벼움")); // 글마다 다르게
         }});
 
         errands.add(new HashMap<String, Object>() {{
@@ -41,8 +45,10 @@ public class ErrandController {
             put("from", "정문");
             put("to", "기숙사");
             put("time", "오늘 21:00");
-            put("status", "마감임박");
+            put("status", "완료");
             put("tag", "거리있음");
+            put("createdAt", "10분 전"); // 또는 "2025-12-14 21:10"
+            put("hashtags", Arrays.asList("#급함", "#거리있음")); // 글마다 다르게
         }});
 
         model.addAttribute("errands", errands);
