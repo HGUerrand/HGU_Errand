@@ -9,5 +9,8 @@
 </h1>
 <br/>
 <a href="hello-servlet">Hello Servlet</a>
+
+<a href="<%= request.getContextPath() %>/errand/list">Go to List</a>
+</a>
 </body>
 </html>
