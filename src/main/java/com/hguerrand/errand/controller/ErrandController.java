@@ -1,9 +1,11 @@
 package com.hguerrand.errand.controller;
 
 import com.hguerrand.errand.dao.ErrandDAO;
+import com.hguerrand.errand.vo.MemberVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.HttpSession;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,8 +38,15 @@ public class ErrandController {
             @RequestParam("from") String from,
             @RequestParam("to") String to,
             @RequestParam("time") String time,
-            @RequestParam(required = false) String hashtags
+            @RequestParam(required = false) String hashtags,
+            HttpSession session
     ) {
+        MemberVO loginMember = (MemberVO) session.getAttribute("loginMember");
+
+        if (loginMember == null) {
+            return "redirect:/auth/login";
+        }
+
         Map<String, Object> e = new HashMap<>();
         e.put("title", title);
         e.put("reward", reward);
@@ -46,7 +55,7 @@ public class ErrandController {
         e.put("time", time);
         e.put("hashtags", hashtags); // "#급함,#가벼움" 형태로 받기
 
-        errandDAO.insert(e);
+        errandDAO.insert(e, loginMember.getMemberId());
         return "redirect:/errand/list";
     }
 
