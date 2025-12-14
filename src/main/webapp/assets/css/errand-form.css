@@ -1,0 +1,44 @@
+.formCard{
+    background: rgba(255,255,255,0.9);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 20px;
+    box-shadow: 0 14px 26px rgba(0,0,0,0.08);
+    max-width: 720px;
+}
+
+.label{
+    display:block;
+    margin: 14px 0 8px;
+    font-size: 13px;
+    font-weight: 900;
+    color: var(--muted);
+}
+
+.input{
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    outline: none;
+    font-size: 14px;
+    font-weight: 700;
+    background: rgba(255,255,255,0.9);
+}
+
+.row2{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.formActions{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top: 18px;
+}
+
+@media (max-width: 640px){
+    .row2{ grid-template-columns: 1fr; }
+}
