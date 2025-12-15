@@ -10,38 +10,48 @@
     <link rel="stylesheet" href="<%= request.getContextPath() %>/assets/css/chat.css">
 </head>
 <body>
-<div class="container narrow chatRoomWrap">
+<body>
+<div class="chatPage">
+    <div class="chatShell">
 
-    <div class="chatHeader">
-        <a class="backBtn" href="<%=request.getContextPath()%>/chat/list">←</a>
-        <div class="chatHeaderText">
-            <img class="chatAvatar"
-                 src="<%=request.getContextPath()%>/upload/${empty header.opponentAvatar ? 'default.png' : header.opponentAvatar}"
-                 alt="profile">
-            <div class="chatWith"><c:out value="${header.opponentName}"/></div>
-            <div class="chatErrand"><c:out value="${header.errandTitle}"/></div>
-        </div>
-    </div>
+        <!-- 헤더 -->
+        <div class="chatHeader">
+            <a class="backBtn" href="<%=request.getContextPath()%>/chat/list">←</a>
 
-    <div id="msgBox" class="msgBox">
-        <c:forEach var="m" items="${messages}">
-            <div class="msgRow ${m.senderId == myId ? 'me' : 'you'}" data-id="${m.messageId}">
-                <div class="bubble">
-                    <div class="content"><c:out value="${m.content}"/></div>
-                    <div class="meta"><c:out value="${m.createdAt}"/></div>
+            <div class="chatHeaderText">
+                <img class="chatAvatar"
+                     src="<%=request.getContextPath()%>/upload/${empty header.opponentAvatar ? 'default.png' : header.opponentAvatar}"
+                     alt="profile">
+
+                <div class="textCol">
+                    <div class="chatWith"><c:out value="${header.opponentName}"/></div>
+                    <div class="chatErrand"><c:out value="${header.errandTitle}"/></div>
                 </div>
             </div>
-        </c:forEach>
+        </div>
+
+        <!-- 메시지 -->
+        <div id="msgBox" class="msgBox">
+            <c:forEach var="m" items="${messages}">
+                <div class="msgRow ${m.senderId == myId ? 'me' : 'you'}">
+                    <div class="bubble">
+                        <div class="content"><c:out value="${m.content}"/></div>
+                        <div class="meta"><c:out value="${m.createdAt}"/></div>
+                    </div>
+                </div>
+            </c:forEach>
+        </div>
+
+        <!-- 입력 -->
+        <form class="sendBar" onsubmit="return false;">
+            <input type="hidden" id="roomId" value="${header.roomId}"/>
+            <input id="content" class="sendInput" placeholder="메시지 입력..." />
+            <button id="sendBtn" class="sendBtn" type="button">전송</button>
+        </form>
+
     </div>
-
-    <form id="sendForm" class="sendBar" onsubmit="return false;">
-        <input type="hidden" id="roomId" value="${header.roomId}"/>
-        <input type="text" id="content" class="sendInput" placeholder="메시지 입력..." autocomplete="off"/>
-        <button type="button" id="sendBtn" class="sendBtn">전송</button>
-    </form>
-
 </div>
-
+</body>
 <script>
     const ctx = "<%=request.getContextPath()%>";
     const roomId = document.getElementById('roomId').value;

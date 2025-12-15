@@ -327,3 +327,23 @@ body{
         font-size:13px;
     }
 }
+
+.searchbar{ display:flex; align-items:center; gap:10px; }
+.searchbar input{ flex:1; min-width:0; }
+
+.searchIcon{ font-weight:1000; color:var(--muted); }
+
+.chip{
+    height:36px; padding:0 14px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,0.9);
+    font-weight:900; font-size:13px;
+    cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center;
+}
+.chip.active{
+    background: rgba(107,15,26,0.12);
+    border-color: rgba(107,15,26,0.35);
+    color: var(--burgundy);
+}

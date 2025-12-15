@@ -6,10 +6,13 @@ public class ChatRoomVO {
     private int requesterId;
     private int helperId;
 
-    private String errandTitle;     // join 결과
-    private String opponentName;    // join 결과
+    private String errandTitle;
+    private String opponentName;
+    private String opponentAvatar; // ✅ 추가
+
     private String lastMessage;
-    private String lastAt;          // format string
+    private String lastAt;
+
 
     public int getRoomId() { return roomId; }
     public void setRoomId(int roomId) { this.roomId = roomId; }
@@ -35,7 +38,8 @@ public class ChatRoomVO {
     public String getLastAt() { return lastAt; }
     public void setLastAt(String lastAt) { this.lastAt = lastAt; }
 
-    private String opponentAvatar;
     public String getOpponentAvatar() { return opponentAvatar; }
     public void setOpponentAvatar(String opponentAvatar) { this.opponentAvatar = opponentAvatar; }
+
+
 }

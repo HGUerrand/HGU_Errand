@@ -7,7 +7,11 @@
     --text-sub: #6B7280;
     --border: #E5E7EB;
     --input-bg: #F3F4F6;       /* 회색 박스 배경 */
+    --burgundy: #6B0F1A;
+    --green: #14532D;
+    --cream: #FFF7ED;
 }
+
 
 * { box-sizing: border-box; }
 
@@ -54,7 +58,7 @@ a { text-decoration: none; color: inherit; }
 .page-title {
     font-size: 16px;
     font-weight: 700;
-    color: var(--text-main);
+    color: black;
 }
 
 /* 메인 카드 디자인 */
@@ -357,3 +361,5 @@ a { text-decoration: none; color: inherit; }
     box-shadow: 0 24px 60px rgba(0,0,0,0.45);
     background: #fff;
 }
+
+.btn.btn-primary:active{ opacity:.9; }

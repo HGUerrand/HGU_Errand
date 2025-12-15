@@ -103,3 +103,26 @@
     transform: scale(1.2);
     accent-color: var(--primary);
 }
+
+.formCard{
+    background: rgba(255,255,255,0.9);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 20px;
+    box-shadow: 0 14px 26px rgba(0,0,0,0.08);
+
+    max-width: 720px;
+    margin: 0 auto;          /* ✅ 이거 추가: 가운데 정렬 */
+    width: 100%;             /* ✅ 안전빵 */
+}
+
+.formCard{
+    max-width: 720px;
+    width: 100%;
+    margin: 0 auto; /* 가운데 정렬 */
+}
+
+.container.narrow{
+    max-width: 900px;
+}
+

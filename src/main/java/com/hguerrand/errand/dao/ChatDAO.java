@@ -46,31 +46,19 @@ public class ChatDAO {
 
     /** 리스트 탭용: 전체/해주세요(requester)/해줄게요(helper) */
     public List<ChatRoomVO> findRoomsForUser(int myId, String tab) {
+
         String where;
-        Object[] params;
-
-        if ("requester".equals(tab)) {
-            where = "cr.requester_id = ?";
-            // opponentName(1) + where(1)
-            params = new Object[]{myId, myId};
-
-        } else if ("helper".equals(tab)) {
-            where = "cr.helper_id = ?";
-            // opponentName(1) + where(1)
-            params = new Object[]{myId, myId};
-
-        } else { // all
-            where = "(cr.requester_id = ? OR cr.helper_id = ?)";
-            // opponentName(1) + where(2)
-            params = new Object[]{myId, myId, myId};
-        }
+        if ("requester".equals(tab)) where = "cr.requester_id = ?";
+        else if ("helper".equals(tab)) where = "cr.helper_id = ?";
+        else where = "(cr.requester_id = ? OR cr.helper_id = ?)";
 
         String sql =
                 "SELECT cr.room_id, cr.errand_id, cr.requester_id, cr.helper_id, " +
                         "       e.title AS errandTitle, " +
                         "       cr.last_message AS lastMessage, " +
                         "       DATE_FORMAT(COALESCE(cr.last_at, cr.created_at), '%Y-%m-%d %H:%i') AS lastAt, " +
-                        "       CASE WHEN cr.requester_id = ? THEN mh.name ELSE mr.name END AS opponentName " +
+                        "       CASE WHEN cr.requester_id = ? THEN mh.name ELSE mr.name END AS opponentName, " +
+                        "       CASE WHEN cr.requester_id = ? THEN mh.avatar ELSE mr.avatar END AS opponentAvatar " +
                         "FROM chat_room cr " +
                         "JOIN errand e ON e.id = cr.errand_id " +
                         "JOIN member mr ON mr.member_id = cr.requester_id " +
@@ -78,7 +66,21 @@ public class ChatDAO {
                         "WHERE " + where + " " +
                         "ORDER BY COALESCE(cr.last_at, cr.created_at) DESC";
 
-        return jdbcTemplate.query(sql, params, (rs, rowNum) -> {
+        java.util.List<Object> params = new java.util.ArrayList<>();
+
+        // SELECT의 CASE용 myId 2번
+        params.add(myId);
+        params.add(myId);
+
+        // WHERE 파라미터
+        if ("requester".equals(tab) || "helper".equals(tab)) {
+            params.add(myId);
+        } else {
+            params.add(myId);
+            params.add(myId);
+        }
+
+        return jdbcTemplate.query(sql, params.toArray(), (rs, rowNum) -> {
             ChatRoomVO r = new ChatRoomVO();
             r.setRoomId(rs.getInt("room_id"));
             r.setErrandId(rs.getInt("errand_id"));
@@ -86,6 +88,7 @@ public class ChatDAO {
             r.setHelperId(rs.getInt("helper_id"));
             r.setErrandTitle(rs.getString("errandTitle"));
             r.setOpponentName(rs.getString("opponentName"));
+            r.setOpponentAvatar(rs.getString("opponentAvatar")); // ✅
             r.setLastMessage(rs.getString("lastMessage"));
             r.setLastAt(rs.getString("lastAt"));
             return r;
@@ -153,13 +156,15 @@ public class ChatDAO {
         String sql =
                 "SELECT cr.room_id, cr.errand_id, cr.requester_id, cr.helper_id, " +
                         "       e.title AS errandTitle, " +
-                        "       CASE WHEN cr.requester_id = ? THEN mh.name ELSE mr.name END AS opponentName " +
+                        "       CASE WHEN cr.requester_id = ? THEN mh.name ELSE mr.name END AS opponentName, " +
+                        "       CASE WHEN cr.requester_id = ? THEN mh.avatar ELSE mr.avatar END AS opponentAvatar " +
                         "FROM chat_room cr " +
                         "JOIN errand e ON e.id = cr.errand_id " +
                         "JOIN member mr ON mr.member_id = cr.requester_id " +
                         "JOIN member mh ON mh.member_id = cr.helper_id " +
-                        "WHERE cr.room_id=?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{myId, roomId}, (rs, rowNum) -> {
+                        "WHERE cr.room_id = ?";
+
+        return jdbcTemplate.queryForObject(sql, new Object[]{myId, myId, roomId}, (rs, rowNum) -> {
             ChatRoomVO r = new ChatRoomVO();
             r.setRoomId(rs.getInt("room_id"));
             r.setErrandId(rs.getInt("errand_id"));
@@ -167,6 +172,7 @@ public class ChatDAO {
             r.setHelperId(rs.getInt("helper_id"));
             r.setErrandTitle(rs.getString("errandTitle"));
             r.setOpponentName(rs.getString("opponentName"));
+            r.setOpponentAvatar(rs.getString("opponentAvatar"));
             return r;
         });
     }
