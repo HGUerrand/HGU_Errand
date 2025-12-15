@@ -12,12 +12,11 @@
 <body>
 <div class="container narrow chatRoomWrap">
 
-    <div class="chatHeader">
-        <a class="backBtn" href="<%=request.getContextPath()%>/chat/list">←</a>
-        <div class="chatHeaderText">
-            <img class="chatAvatar"
-                 src="<%=request.getContextPath()%>/upload/${empty header.opponentAvatar ? 'default.png' : header.opponentAvatar}"
-                 alt="profile">
+    <div class="chatHeaderText">
+        <img class="chatAvatar"
+             src="<%=request.getContextPath()%>/upload/${empty header.opponentAvatar ? 'default.png' : header.opponentAvatar}"
+             alt="profile">
+        <div class="textCol">
             <div class="chatWith"><c:out value="${header.opponentName}"/></div>
             <div class="chatErrand"><c:out value="${header.errandTitle}"/></div>
         </div>

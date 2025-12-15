@@ -13,8 +13,18 @@
 </head>
 <body>
 <div class="container narrow">
-
-    <h2 style="margin:0 0 12px;">게시글 수정</h2>
+    <div class="topbar">
+        <div class="brand">
+            <div class="logo"></div>
+            <div>
+                <p class="title">게시글 수정</p>
+                <p class="subtitle">내용을 업데이트해요 ✨</p>
+            </div>
+        </div>
+        <div class="actions">
+            <a class="btn" href="<%=request.getContextPath()%>/errand/detail?id=${e.id}">뒤로</a>
+        </div>
+    </div>
 
     <form class="formCard" method="post"
           action="<%=request.getContextPath()%>/errand/edit"

@@ -40,9 +40,8 @@
 
     <!-- Search (UI only) -->
     <div class="searchbar">
-        <span style="font-weight:1000;color:var(--muted);">🔎</span>
-        <input placeholder="제목/장소로 검색 (UI만 먼저)" />
-        <span class="chip active">전체</span>
+        <input placeholder="제목/장소로 검색" />
+        <button type="button" class="chip active">전체</button>
     </div>
 
     <!-- Filters (UI only) -->

@@ -92,10 +92,7 @@ body {
     box-shadow: 0 14px 28px rgba(20,83,45,0.18);
 }
 
-:root{
-    --primary: var(--burgundy);
-    --secondary: var(--green);
 
-    --text-main: var(--ink);
-    --text-sub: var(--muted);
+.container.narrow{
+    max-width: 900px;
 }

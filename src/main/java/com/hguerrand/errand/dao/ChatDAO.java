@@ -153,13 +153,15 @@ public class ChatDAO {
         String sql =
                 "SELECT cr.room_id, cr.errand_id, cr.requester_id, cr.helper_id, " +
                         "       e.title AS errandTitle, " +
-                        "       CASE WHEN cr.requester_id = ? THEN mh.name ELSE mr.name END AS opponentName " +
+                        "       CASE WHEN cr.requester_id = ? THEN mh.name ELSE mr.name END AS opponentName, " +
+                        "       CASE WHEN cr.requester_id = ? THEN mh.avatar ELSE mr.avatar END AS opponentAvatar " +
                         "FROM chat_room cr " +
                         "JOIN errand e ON e.id = cr.errand_id " +
                         "JOIN member mr ON mr.member_id = cr.requester_id " +
                         "JOIN member mh ON mh.member_id = cr.helper_id " +
-                        "WHERE cr.room_id=?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{myId, roomId}, (rs, rowNum) -> {
+                        "WHERE cr.room_id = ?";
+
+        return jdbcTemplate.queryForObject(sql, new Object[]{myId, myId, roomId}, (rs, rowNum) -> {
             ChatRoomVO r = new ChatRoomVO();
             r.setRoomId(rs.getInt("room_id"));
             r.setErrandId(rs.getInt("errand_id"));
@@ -167,6 +169,7 @@ public class ChatDAO {
             r.setHelperId(rs.getInt("helper_id"));
             r.setErrandTitle(rs.getString("errandTitle"));
             r.setOpponentName(rs.getString("opponentName"));
+            r.setOpponentAvatar(rs.getString("opponentAvatar"));
             return r;
         });
     }
