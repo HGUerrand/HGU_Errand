@@ -50,4 +50,19 @@ public class MemberDAO {
     public int updateAvatar(int memberId, String avatar) {
         return jdbcTemplate.update("UPDATE member SET avatar=? WHERE member_id=?", avatar, memberId);
     }
+
+    public int insertSignup(String loginId, String password, String name, String studentCardPath) {
+        String sql =
+                "INSERT INTO member " +
+                        "(login_id, password, name, role, status, student_card_path) " +
+                        "VALUES (?, ?, ?, 'USER', 'PENDING', ?)";
+
+        return jdbcTemplate.update(
+                sql,
+                loginId,
+                password,
+                name,
+                studentCardPath
+        );
+    }
 }

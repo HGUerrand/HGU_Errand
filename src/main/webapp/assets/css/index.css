@@ -1,0 +1,49 @@
+body {
+    background: linear-gradient(180deg, #f2f6ff, #ffffff);
+}
+
+.index-wrap {
+    margin-top: 60px;
+    text-align: center;
+}
+
+.index-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.index-subtitle {
+    color: #555;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+.index-features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+}
+
+.feature-box {
+    background: #fff;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.feature-box h3 {
+    margin-bottom: 8px;
+}
+
+.feature-box p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.index-buttons {
+    display: flex;
+    gap: 12px;
+}
