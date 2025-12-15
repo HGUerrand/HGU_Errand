@@ -1,49 +1,49 @@
-body {
-    background: linear-gradient(180deg, #f2f6ff, #ffffff);
-}
-
-.index-wrap {
-    margin-top: 60px;
+.hero {
     text-align: center;
+    margin-top: 80px;
 }
 
-.index-title {
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 10px;
+.hero h1 {
+    font-size: 40px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
 }
 
-.index-subtitle {
-    color: #555;
-    margin-bottom: 40px;
-    line-height: 1.6;
+.hero p {
+    font-size: 16px;
+    color: var(--muted);
+    margin-bottom: 50px;
 }
 
-.index-features {
+.feature-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 40px;
+    gap: 28px;
+    margin-bottom: 60px;
 }
 
-.feature-box {
-    background: #fff;
-    border-radius: 14px;
-    padding: 20px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+.feature-card {
+    background: var(--card);
+    border-radius: 22px;
+    padding: 34px 26px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
 }
 
-.feature-box h3 {
-    margin-bottom: 8px;
+.feature-card h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+    font-weight: 800;
 }
 
-.feature-box p {
-    color: #666;
+.feature-card p {
+    margin: 0;
     font-size: 14px;
-    line-height: 1.4;
+    color: var(--muted);
 }
 
-.index-buttons {
+.hero-actions {
     display: flex;
-    gap: 12px;
+    justify-content: center;
+    gap: 18px;
 }
