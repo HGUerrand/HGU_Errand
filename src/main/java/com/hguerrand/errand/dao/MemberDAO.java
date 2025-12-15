@@ -36,8 +36,18 @@ public class MemberDAO {
 
     public Map<String, Object> findById(int memberId) {
         String sql =
-                "SELECT member_id, login_id, name, role, status, created_at " +
+                "SELECT member_id, login_id, name, role, status, avatar AS avatar, created_at " +
                         "FROM member WHERE member_id=?";
         return jdbcTemplate.queryForMap(sql, memberId);
+    }
+
+    // ✅ 닉네임 변경
+    public int updateName(int memberId, String name) {
+        return jdbcTemplate.update("UPDATE member SET name=? WHERE member_id=?", name, memberId);
+    }
+
+    // ✅ 아바타 변경
+    public int updateAvatar(int memberId, String avatar) {
+        return jdbcTemplate.update("UPDATE member SET avatar=? WHERE member_id=?", avatar, memberId);
     }
 }

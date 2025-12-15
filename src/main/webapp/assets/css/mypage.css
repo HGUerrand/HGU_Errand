@@ -1,0 +1,178 @@
+/* ===== MyPage Profile Card ===== */
+.profileCard{
+    margin-bottom:16px;
+    padding:18px;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:#fff;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.05);
+}
+
+.profileRow{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.avatarWrap{
+    position:relative;
+    width:84px; height:84px;
+    flex: 0 0 84px;
+}
+
+.avatarImg{
+    width:84px; height:84px;
+    border-radius:999px;
+    object-fit:cover;
+    border:1px solid var(--border);
+    background:#eee;
+}
+
+.iconBtn{
+    width:34px; height:34px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-weight:1000;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+}
+.avatarEdit{
+    position:absolute;
+    right:-6px;
+    bottom:-6px;
+}
+
+.profileMain{
+    flex:1;
+    min-width:0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+}
+
+.nameBlock{ min-width:0; }
+.nameLine{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.nameText{
+    font-size:18px;
+    font-weight:1000;
+    color: var(--ink);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    max-width: 520px;
+}
+
+.idText{
+    margin-top:4px;
+    font-size:12px;
+    font-weight:800;
+    color: var(--muted);
+}
+
+.editArea{
+    display:none;
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px solid rgba(0,0,0,0.06);
+}
+.editArea.show{ display:block; }
+
+.inlineRow{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+}
+
+.textInput{
+    flex:1;
+    height:44px;
+    border-radius:14px;
+    border:1px solid var(--border);
+    padding:0 12px;
+    font-weight:800;
+    background:#fff;
+    min-width: 240px;
+}
+
+.fileHidden{ display:none; }
+
+.fileName{
+    font-size:12px;
+    font-weight:800;
+    color: var(--muted);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    max-width: 420px;
+}
+
+.btnSmall{
+    height:44px;
+    padding:0 14px;
+    border-radius:14px;
+    border:1px solid var(--border);
+    background: rgba(255,255,255,0.85);
+    font-weight:900;
+    cursor:pointer;
+    white-space:nowrap;
+}
+
+.btnPrimary{
+    border:none;
+    color:#fff;
+    background: linear-gradient(135deg, var(--burgundy), var(--green));
+    box-shadow: 0 14px 28px rgba(20,83,45,0.18);
+}
+
+.btnSmall:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.hint{
+    margin-top:10px;
+    font-size:12px;
+    font-weight:800;
+    color: var(--muted);
+}
+
+/* ===== Toast ===== */
+.toast{
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    background: rgba(17,24,39,0.92);
+    color: #fff;
+    padding: 12px 14px;
+    border-radius: 999px;
+    font-weight: 900;
+    font-size: 13px;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.22);
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+}
+.toast.show{
+    opacity: 1;
+    transform: translateX(-50%) translateY(-6px);
+}
+
+@media (max-width: 560px){
+    .profileRow{ align-items:flex-start; }
+    .profileMain{ flex-direction:column; align-items:flex-start; }
+    .nameText{ max-width: 100%; }
+    .fileName{ max-width: 100%; }
+}

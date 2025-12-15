@@ -70,11 +70,15 @@ public class ErrandDAO {
 
     public Map<String, Object> findById(int id) {
         String sql =
-                "SELECT id, title, reward, " +
-                        "from_place AS `from`, to_place AS `to`, time_text AS `time`, " +
-                        "status, hashtags, description, image_path AS imagePath, requester_id AS requesterId, " +
-                        "DATE_FORMAT(created_at, '%Y-%m-%d %H:%i') AS createdAt " +
-                        "FROM errand WHERE id=?";
+                "SELECT e.id, e.title, e.reward, " +
+                        "       e.from_place AS `from`, e.to_place AS `to`, e.time_text AS `time`, " +
+                        "       e.status, e.hashtags, e.description, e.image_path AS imagePath, " +
+                        "       e.requester_id AS requesterId, " +
+                        "       DATE_FORMAT(e.created_at, '%Y-%m-%d %H:%i') AS createdAt, " +
+                        "       m.name AS writer_name, m.avatar AS writer_avatar " +   // ✅ 여기!
+                        "FROM errand e " +
+                        "LEFT JOIN member m ON m.member_id = e.requester_id " +
+                        "WHERE e.id=?";
 
         return jdbcTemplate.queryForMap(sql, id);
     }

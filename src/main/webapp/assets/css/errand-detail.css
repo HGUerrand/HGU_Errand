@@ -1,7 +1,7 @@
 :root {
     --bg-color: #FDFBF7;       /* 리스트 페이지 배경색 */
     --card-bg: #FFFFFF;
-    --primary: #6B0F1A;        /* 버건디 */
+    --primary: linear-gradient(135deg, var(--burgundy), var(--green));       /* 버건디 */
     --secondary: #14532D;      /* 짙은 녹색 */
     --text-main: #1F2937;
     --text-sub: #6B7280;
@@ -210,7 +210,7 @@ a { text-decoration: none; color: inherit; }
 .btn:active { opacity: 0.8; }
 
 .btn-primary {
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--burgundy), var(--green));
     color: white;
     box-shadow: 0 4px 12px rgba(107, 15, 26, 0.25);
 }
