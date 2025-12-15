@@ -1,6 +1,7 @@
 package com.hguerrand.errand.dao;
 
 import com.hguerrand.errand.vo.MemberVO;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -65,4 +66,25 @@ public class MemberDAO {
                 studentCardPath
         );
     }
+
+    public List<Map<String, Object>> findPendingMembers() {
+        String sql = "SELECT * FROM member WHERE status = 'PENDING'";
+        return jdbcTemplate.queryForList(sql);
+    }
+
+    public void approveMember(int memberId) {
+        String sql = "UPDATE member SET status = 'APPROVED' WHERE member_id = ?";
+        jdbcTemplate.update(sql, memberId);
+    }
+
+    public MemberVO findByLoginId(String loginId) {
+        String sql = "SELECT * FROM member WHERE login_id = ?";
+        return jdbcTemplate.queryForObject(
+                sql,
+                new BeanPropertyRowMapper<>(MemberVO.class),
+                loginId
+        );
+    }
+
+
 }

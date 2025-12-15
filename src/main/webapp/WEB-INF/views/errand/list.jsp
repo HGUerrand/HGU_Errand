@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,6 +37,19 @@
                 <a class="btn" href="<%=request.getContextPath()%>/mypage">마이</a>
             </div>
         </div>
+    </div>
+
+    <div class="nav">
+        <a href="${pageContext.request.contextPath}/errand/list">홈</a>
+        <a href="${pageContext.request.contextPath}/chat/list">채팅</a>
+        <a href="${pageContext.request.contextPath}/mypage">마이</a>
+
+        <c:if test="${loginMember.role eq 'ADMIN'}">
+            <a href="${pageContext.request.contextPath}/admin/members"
+               class="admin-btn">
+                회원관리
+            </a>
+        </c:if>
     </div>
 
     <!-- Search (UI only) -->

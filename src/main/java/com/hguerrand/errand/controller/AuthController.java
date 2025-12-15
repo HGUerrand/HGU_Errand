@@ -22,6 +22,10 @@ public class AuthController {
         this.memberDAO = memberDAO;
     }
 
+    /* =======================
+       로그인
+     ======================= */
+
     @GetMapping("/login")
     public String loginForm() {
         return "auth/login";
@@ -33,24 +37,41 @@ public class AuthController {
                         HttpSession session,
                         Model model) {
 
-        System.out.println("[LOGIN] id=" + loginId + ", pw=" + password);
+        // 1️⃣ 아이디로 회원 조회
+        MemberVO member = memberDAO.findByLoginId(loginId);
 
-        MemberVO member = memberDAO.findByLoginIdAndPassword(loginId, password);
-
+        // 아이디 없음
         if (member == null) {
             model.addAttribute("error", "아이디 또는 비밀번호가 올바르지 않습니다.");
             return "auth/login";
         }
 
-        if (!"APPROVED".equalsIgnoreCase(member.getStatus())) {
-            model.addAttribute("error", "승인 대기중입니다. (상태: " + member.getStatus() + ")");
+        // 2️⃣ 비밀번호 불일치
+        if (!member.getPassword().equals(password)) {
+            model.addAttribute("error", "아이디 또는 비밀번호가 올바르지 않습니다.");
             return "auth/login";
         }
 
+        // 3️⃣ 승인 대기
+        if ("PENDING".equalsIgnoreCase(member.getStatus())) {
+            model.addAttribute("error", "관리자 승인 대기중입니다.");
+            return "auth/login";
+        }
+
+        // 4️⃣ 승인 거절 (선택)
+        if ("REJECTED".equalsIgnoreCase(member.getStatus())) {
+            model.addAttribute("error", "승인이 거절된 계정입니다.");
+            return "auth/login";
+        }
+
+        // 5️⃣ 로그인 성공
         session.setAttribute("loginMember", member);
-        System.out.println("[LOGIN] success, session set: " + session.getAttribute("loginMember"));
         return "redirect:/errand/list";
     }
+
+    /* =======================
+       로그아웃
+     ======================= */
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
@@ -58,23 +79,22 @@ public class AuthController {
         return "redirect:/auth/login";
     }
 
-    @PostMapping("/signup")
-    public String signup(
-            @RequestParam String loginId,
-            @RequestParam String password,
-            @RequestParam String name,
-            @RequestParam("studentCard") MultipartFile studentCard,
-            HttpServletRequest request,
-            Model model
-    ) {
+    /* =======================
+       회원가입
+     ======================= */
 
-    /*
-    // 학교 이메일 제한
-    if (!loginId.endsWith("@handong.ac.kr")) {
-        model.addAttribute("error", "학교 이메일만 가입 가능합니다.");
+    @GetMapping("/signup")
+    public String signupForm() {
         return "auth/signup";
     }
-    */
+
+    @PostMapping("/signup")
+    public String signup(@RequestParam String loginId,
+                         @RequestParam String password,
+                         @RequestParam String name,
+                         @RequestParam("studentCard") MultipartFile studentCard,
+                         HttpServletRequest request,
+                         Model model) {
 
         // 학생증 필수
         if (studentCard == null || studentCard.isEmpty()) {
@@ -95,7 +115,7 @@ public class AuthController {
             File dest = new File(uploadDir, savedName);
             studentCard.transferTo(dest);
 
-            // DB 저장 (승인 대기 상태)
+            // DB 저장 (PENDING 상태)
             memberDAO.insertSignup(
                     loginId,
                     password,
@@ -103,7 +123,6 @@ public class AuthController {
                     "student/" + savedName
             );
 
-            // 로그인 페이지로 이동
             return "redirect:/auth/login";
 
         } catch (Exception e) {
@@ -112,11 +131,4 @@ public class AuthController {
             return "auth/signup";
         }
     }
-
-    @GetMapping("/signup")
-    public String signupForm() {
-        return "auth/signup";
-    }
-
-
 }
