@@ -5,12 +5,11 @@
     <title>JSP - Hello World</title>
 </head>
 <body>
-<h1><%= "Hello World!" %>
+<h1><%= "Handong Errand Index Page" %>
 </h1>
 <br/>
-<a href="hello-servlet">Hello Servlet</a>
 
-<a href="<%= request.getContextPath() %>/errand/list">Go to List</a>
+<a href="<%= request.getContextPath() %>/errand/list">Login</a>
 </a>
 </body>
 </html>
