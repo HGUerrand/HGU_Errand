@@ -30,8 +30,6 @@
           action="<%=request.getContextPath()%>/errand/create"
           enctype="multipart/form-data">
 
-        <label class="label">작성자 이름</label>
-        <input class="input" name="writerName" placeholder="예) 김한동" />
 
         <label class="label">제목</label>
         <input class="input" name="title" placeholder="예) 프린트물 대신 뽑아주기" required />
@@ -66,7 +64,36 @@
         <input class="input" name="hashtags" placeholder="#급함,#가벼움" />
 
         <label class="label">사진 업로드 (선택)</label>
-        <input class="input" type="file" name="image" accept="image/*" />
+        <input id="imagesInput" class="input" type="file" name="images" accept="image/*" multiple />
+
+        <ul id="fileList" class="fileList"></ul>
+
+        <script>
+            const input = document.getElementById('imagesInput');
+            const list = document.getElementById('fileList');
+
+            function renderFiles() {
+                list.innerHTML = "";
+                const files = Array.from(input.files);
+                files.forEach((f, idx) => {
+                    const li = document.createElement('li');
+                    li.className = "fileItem";
+                    li.innerHTML = `
+        <span class="fileName">${f.name}</span>
+        <button type="button" class="fileRemove" aria-label="remove">×</button>
+      `;
+                    li.querySelector('.fileRemove').addEventListener('click', () => {
+                        const dt = new DataTransfer();
+                        files.forEach((file, i) => { if (i !== idx) dt.items.add(file); });
+                        input.files = dt.files;
+                        renderFiles();
+                    });
+                    list.appendChild(li);
+                });
+            }
+
+            input.addEventListener('change', renderFiles);
+        </script>
 
         <div class="formActions">
             <a class="btn" href="<%=request.getContextPath()%>/errand/list">취소</a>

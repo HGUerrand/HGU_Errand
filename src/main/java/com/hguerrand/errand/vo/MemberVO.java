@@ -8,9 +8,11 @@ public class MemberVO {
     private String loginId;      // 로그인 아이디
     private String password;     // 비밀번호
     private String name;         // 이름(닉네임)
+    private String avatar;   // ✅ 추가
     private String role;         // USER / ADMIN
     private String status;       // PENDING / APPROVED
     private LocalDateTime createdAt;
+
 
     public int getMemberId() {
         return memberId;
@@ -67,4 +69,8 @@ public class MemberVO {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    // ✅ 추가 getter/setter
+    public String getAvatar() { return avatar; }
+    public void setAvatar(String avatar) { this.avatar = avatar; }
 }

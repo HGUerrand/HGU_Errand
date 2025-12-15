@@ -118,9 +118,49 @@
             <div class="description-text"><c:out value="${e.description}"/></div>
 
             <!-- 이미지 (있을 경우에만) -->
-            <c:if test="${not empty e.image_path}">
-                <img class="errand-image" src="<%=request.getContextPath()%>/upload/${e.image_path}" alt="첨부 이미지">
+            <c:if test="${not empty images}">
+                <div class="photo-grid">
+                    <c:forEach var="img" items="${images}">
+                        <button type="button"
+                                class="thumb"
+
+                            data-full="<%=request.getContextPath()%>/upload/${img.imagePath}">
+                            <img src="<%=request.getContextPath()%>/upload/${img.imagePath}" alt="첨부 이미지">
+                        </button>
+                    </c:forEach>
+                </div>
             </c:if>
+
+            <!-- 라이트박스 -->
+            <div id="lightbox" class="lightbox" style="display:none;">
+                <div class="lightbox-bg"></div>
+                <img id="lightboxImg" class="lightbox-img" alt="full">
+            </div>
+
+            <script>
+                const lb = document.getElementById('lightbox');
+                const lbImg = document.getElementById('lightboxImg');
+
+                document.addEventListener('click', (e) => {
+                    const btn = e.target.closest('.thumb');
+                    if (btn) {
+                        lbImg.src = btn.dataset.full;
+                        lb.style.display = 'block';
+                        return;
+                    }
+                    if (e.target.classList.contains('lightbox-bg') || e.target.id === 'lightbox') {
+                        lb.style.display = 'none';
+                        lbImg.src = '';
+                    }
+                });
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        lb.style.display = 'none';
+                        lbImg.src = '';
+                    }
+                });
+            </script>
         </div>
 
         <!-- 해시태그 -->

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -92,9 +93,13 @@
 
                 <!-- 해시태그(텍스트 느낌) -->
                 <div class="hashtags">
-                    <c:forEach var="h" items="${e.hashtags}">
-                        <span class="hashText">${h}</span>
-                    </c:forEach>
+                    <c:if test="${not empty e.hashtags}">
+                        <div class="hashtags">
+                            <c:forEach var="h" items="${fn:split(e.hashtags, ',')}">
+                                <span class="hashText">${fn:trim(h)}</span>
+                            </c:forEach>
+                        </div>
+                    </c:if>
                 </div>
 
                 <!-- 하단 작성시간 -->
