@@ -62,10 +62,14 @@ public class ErrandDAO {
         return jdbcTemplate.queryForList(sql, requesterId);
     }
 
-    public Map<String, Object> findById(int memberId) {
+    public Map<String, Object> findById(int id) {
         String sql =
-                "SELECT member_id, login_id, name, role, status, created_at " +
-                        "FROM member WHERE member_id=?";
-        return jdbcTemplate.queryForMap(sql, memberId);
+                "SELECT id, title, reward, " +
+                        "from_place AS `from`, to_place AS `to`, time_text AS `time`, " +
+                        "status, hashtags, description, image_path AS imagePath, requester_id AS requesterId, " +
+                        "DATE_FORMAT(created_at, '%Y-%m-%d %H:%i') AS createdAt " +
+                        "FROM errand WHERE id=?";
+
+        return jdbcTemplate.queryForMap(sql, id);
     }
 }
