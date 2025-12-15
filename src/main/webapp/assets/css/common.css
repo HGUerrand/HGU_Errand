@@ -96,3 +96,58 @@ body {
 .container.narrow{
     max-width: 900px;
 }
+
+/* =========================
+   Auth Header (Login / Signup)
+   ========================= */
+
+.auth-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 36px;
+}
+
+.auth-header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.logo-circle {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #7b1e1e, #2f4f2f);
+}
+
+.brand-text .brand-title {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.brand-text .brand-sub {
+    font-size: 13px;
+    color: #666;
+}
+
+.auth-header-right {
+    display: flex;
+    gap: 12px;
+}
+
+.auth-nav-btn {
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: #fff;
+    font-weight: 700;
+    color: #111;
+    text-decoration: none;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition: all 0.2s ease;
+}
+
+.auth-nav-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.18);
+}

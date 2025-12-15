@@ -20,12 +20,6 @@
     </properties>
 
     <dependencies>
-        <!-- 기존: 파일 업로드 cos -->
-        <dependency>
-            <groupId>com.servlets</groupId>
-            <artifactId>cos</artifactId>
-            <version>05Nov2002</version>
-        </dependency>
 
         <!-- MariaDB Driver -->
         <dependency>

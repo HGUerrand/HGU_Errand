@@ -1,0 +1,49 @@
+.hero {
+    text-align: center;
+    margin-top: 80px;
+}
+
+.hero h1 {
+    font-size: 40px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
+}
+
+.hero p {
+    font-size: 16px;
+    color: var(--muted);
+    margin-bottom: 50px;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-bottom: 60px;
+}
+
+.feature-card {
+    background: var(--card);
+    border-radius: 22px;
+    padding: 34px 26px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+.feature-card h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.feature-card p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+}

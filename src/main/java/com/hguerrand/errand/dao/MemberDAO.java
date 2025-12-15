@@ -1,6 +1,7 @@
 package com.hguerrand.errand.dao;
 
 import com.hguerrand.errand.vo.MemberVO;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -50,4 +51,40 @@ public class MemberDAO {
     public int updateAvatar(int memberId, String avatar) {
         return jdbcTemplate.update("UPDATE member SET avatar=? WHERE member_id=?", avatar, memberId);
     }
+
+    public int insertSignup(String loginId, String password, String name, String studentCardPath) {
+        String sql =
+                "INSERT INTO member " +
+                        "(login_id, password, name, role, status, student_card_path) " +
+                        "VALUES (?, ?, ?, 'USER', 'PENDING', ?)";
+
+        return jdbcTemplate.update(
+                sql,
+                loginId,
+                password,
+                name,
+                studentCardPath
+        );
+    }
+
+    public List<Map<String, Object>> findPendingMembers() {
+        String sql = "SELECT * FROM member WHERE status = 'PENDING'";
+        return jdbcTemplate.queryForList(sql);
+    }
+
+    public void approveMember(int memberId) {
+        String sql = "UPDATE member SET status = 'APPROVED' WHERE member_id = ?";
+        jdbcTemplate.update(sql, memberId);
+    }
+
+    public MemberVO findByLoginId(String loginId) {
+        String sql = "SELECT * FROM member WHERE login_id = ?";
+        return jdbcTemplate.queryForObject(
+                sql,
+                new BeanPropertyRowMapper<>(MemberVO.class),
+                loginId
+        );
+    }
+
+
 }
