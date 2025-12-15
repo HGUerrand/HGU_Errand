@@ -6,6 +6,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+
 @Repository
 public class ErrandDAO {
 
@@ -72,4 +78,86 @@ public class ErrandDAO {
 
         return jdbcTemplate.queryForMap(sql, id);
     }
+
+    public int updateTextOnly(Map<String, Object> e) {
+        String sql =
+                "UPDATE errand SET title=?, reward=?, from_place=?, to_place=?, time_text=?, " +
+                        "hashtags=?, description=? WHERE id=?";
+        return jdbcTemplate.update(sql,
+                e.get("title"),
+                e.get("reward"),
+                e.get("from"),
+                e.get("to"),
+                e.get("time"),
+                e.get("hashtags"),
+                e.get("description"),
+                e.get("id")
+        );
+    }
+
+    public List<Map<String, Object>> findImagesByErrandId(int errandId) {
+        String sql = "SELECT image_id AS imageId, image_path AS imagePath FROM errand_image WHERE errand_id=? ORDER BY image_id ASC";
+        return jdbcTemplate.queryForList(sql, errandId);
+    }
+
+    public void insertImages(int errandId, List<String> fileNames) {
+        String sql = "INSERT INTO errand_image (errand_id, image_path) VALUES (?, ?)";
+        for (String fn : fileNames) {
+            jdbcTemplate.update(sql, errandId, fn);
+        }
+    }
+
+    public int deleteImageById(int imageId) {
+        return jdbcTemplate.update("DELETE FROM errand_image WHERE image_id=?", imageId);
+    }
+
+    public int insertAndReturnId(Map<String, Object> e, int requesterId) {
+        String sql =
+                "INSERT INTO errand " +
+                        "(title, reward, from_place, to_place, time_text, status, hashtags, description, requester_id) " +
+                        "VALUES (?, ?, ?, ?, ?, '모집중', ?, ?, ?)";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, (String) e.get("title"));
+            ps.setInt(2, (Integer) e.get("reward"));
+            ps.setString(3, (String) e.get("from"));
+            ps.setString(4, (String) e.get("to"));
+            ps.setString(5, (String) e.get("time"));
+            ps.setString(6, (String) e.get("hashtags"));
+            ps.setString(7, (String) e.get("description"));
+            ps.setInt(8, requesterId);
+            return ps;
+        }, keyHolder);
+
+        return keyHolder.getKey().intValue();
+    }
+
+    public int insertAndReturnId(String title, int reward, String from, String to, String time,
+                                 String hashtags, String description, int requesterId) {
+
+        String sql = "INSERT INTO errand (title, reward, from_place, to_place, time_text, status, hashtags, description, requester_id) " +
+                "VALUES (?, ?, ?, ?, ?, '모집중', ?, ?, ?)";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, title);
+            ps.setInt(2, reward);
+            ps.setString(3, from);
+            ps.setString(4, to);
+            ps.setString(5, time);
+            ps.setString(6, hashtags);
+            ps.setString(7, description);
+            ps.setInt(8, requesterId);
+            return ps;
+        }, keyHolder);
+
+        return keyHolder.getKey().intValue();
+    }
+
+
 }

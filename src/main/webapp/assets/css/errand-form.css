@@ -54,3 +54,52 @@
     resize: vertical;
     background: rgba(255,255,255,0.9);
 }
+
+.fileList { list-style:none; padding:0; margin:10px 0 0; display:flex; flex-direction:column; gap:8px; }
+.fileItem { display:flex; align-items:center; justify-content:space-between; padding:10px 12px; border:1px solid var(--border); border-radius:14px; background:rgba(255,255,255,0.9); }
+.fileName { font-size:13px; font-weight:800; color:var(--text-main); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width: 85%; }
+.fileRemove { width:28px; height:28px; border-radius:999px; border:1px solid var(--border); background:#fff; font-size:18px; line-height:0; cursor:pointer; }
+
+/* ✅ edit page thumbnail grid fix */
+.editPhotosGrid{
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+@media (max-width:640px){
+    .editPhotosGrid{ grid-template-columns: repeat(3, 1fr); }
+}
+
+/* label이라 기본 스타일 영향받기 쉬워서 block + 크기 고정 */
+.editThumb{
+    display: block;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;   /* 정사각 썸네일 */
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    position: relative;
+}
+
+/* 전역 img 스타일을 여기서 확실히 덮어쓰기 */
+.editThumb img{
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    display: block;
+}
+
+/* 체크박스도 살짝 보기 좋게 */
+.editThumb input[type="checkbox"]{
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    transform: scale(1.2);
+    accent-color: var(--primary);
+}
