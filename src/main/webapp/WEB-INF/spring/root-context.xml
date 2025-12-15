@@ -8,11 +8,15 @@
 
     <context:component-scan base-package="com.hguerrand"/>
 
+    <!-- db.properties 연결 -->
+    <context:property-placeholder location="classpath:db.properties"/>
+
+    <!-- DataSource -->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="org.mariadb.jdbc.Driver"/>
-        <property name="url" value="jdbc:mariadb://walab.handong.edu:3306/W25_22400661"/>
-        <property name="username" value="W25_22400661"/>
-        <property name="password" value="zah0Pi"/>
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
     </bean>
 
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">

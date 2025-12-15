@@ -31,49 +31,42 @@
                 <!-- 상태 칩 -->
                 <div class="ctaRow">
                     <c:choose>
-                        <%-- 내 글일 때만 상태 변경 가능 --%>
+                        <%-- ✅ 내 글일 때만 상태 변경 가능 --%>
                         <c:when test="${e.isMine}">
                             <c:choose>
                                 <c:when test="${e.status eq '모집중'}">
-                                    <form method="post" action="<%=request.getContextPath()%>/errand/status"
-                                          style="margin:0;">
+                                    <form method="post" action="<%=request.getContextPath()%>/errand/status" style="margin:0;">
                                         <input type="hidden" name="id" value="${e.id}">
                                         <input type="hidden" name="status" value="예약">
-                                        <button class="cta green" type="submit">예약으로 변경</button>
+                                        <button class="cta cta-green" type="submit">예약으로 변경</button>
                                     </form>
                                 </c:when>
 
                                 <c:when test="${e.status eq '예약'}">
-                                    <form method="post" action="<%=request.getContextPath()%>/errand/status"
-                                          style="margin:0;">
+                                    <form method="post" action="<%=request.getContextPath()%>/errand/status" style="margin:0;">
                                         <input type="hidden" name="id" value="${e.id}">
                                         <input type="hidden" name="status" value="완료">
-                                        <button class="cta green" type="submit">완료로 변경</button>
+                                        <button class="cta cta-green" type="submit">완료로 변경</button>
                                     </form>
                                 </c:when>
 
                                 <c:when test="${e.status eq '완료'}">
-                                    <form method="post" action="<%=request.getContextPath()%>/errand/status"
-                                          style="margin:0;">
+                                    <form method="post" action="<%=request.getContextPath()%>/errand/status" style="margin:0;">
                                         <input type="hidden" name="id" value="${e.id}">
                                         <input type="hidden" name="status" value="모집중">
-                                        <button class="cta danger" type="submit">완료 취소 (모집중)</button>
+                                        <button class="cta cta-danger" type="submit">완료 취소 (모집중)</button>
                                     </form>
                                 </c:when>
 
                                 <c:otherwise>
-                    <span style="font-size:12px; font-weight:900; color:#6B7280;">
-                        상태: <c:out value="${e.status}"/>
-                    </span>
+                                    <span class="statusText">상태: <c:out value="${e.status}"/></span>
                                 </c:otherwise>
                             </c:choose>
                         </c:when>
 
-                        <%-- 남의 글이면 상태만 표시 --%>
+                        <%-- ✅ 남의 글: 상태만 표시 --%>
                         <c:otherwise>
-            <span style="font-size:12px; font-weight:900; color:#6B7280;">
-                상태: <c:out value="${e.status}"/>
-            </span>
+                            <span class="statusText">상태: <c:out value="${e.status}"/></span>
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -145,32 +138,22 @@
 <!-- 하단 고정 액션바 -->
 <div class="bottom-action-bar">
     <div class="action-inner">
-
         <c:choose>
             <c:when test="${e.isMine}">
                 <a href="<%=request.getContextPath()%>/errand/edit?id=${e.id}"
-                   class="btn btn-secondary" style="flex:1; text-align:center;">
-                    수정하기
-                </a>
+                   class="btn btn-secondary" style="flex:1; text-align:center;">수정하기</a>
 
-                <form method="post" action="<%=request.getContextPath()%>/errand/delete"
-                      style="flex:1; margin:0;"
-                      onsubmit="return confirm('정말 삭제할까? 삭제하면 되돌릴 수 없어!');">
+                <form method="post" action="<%=request.getContextPath()%>/errand/delete" style="flex:1; margin:0;">
                     <input type="hidden" name="id" value="${e.id}">
-                    <button type="submit" class="btn btn-danger" style="width:100%;">
-                        삭제하기
-                    </button>
+                    <button type="submit" class="btn btn-danger" style="width:100%;">삭제하기</button>
                 </form>
             </c:when>
 
             <c:otherwise>
                 <a href="<%=request.getContextPath()%>/chat/start?id=${e.id}"
-                   class="btn btn-primary" style="flex:1; text-align:center;">
-                    채팅하기
-                </a>
+                   class="btn btn-primary" style="flex:1; text-align:center;">채팅하기</a>
             </c:otherwise>
         </c:choose>
-
     </div>
 </div>
 

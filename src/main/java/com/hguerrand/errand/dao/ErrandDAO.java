@@ -19,18 +19,17 @@ public class ErrandDAO {
         String sql =
                 "SELECT id, title, reward, " +
                         "from_place AS `from`, to_place AS `to`, time_text AS `time`, " +
-                        "status, hashtags, " +
+                        "status, hashtags, description, requester_id AS requesterId, " +
                         "DATE_FORMAT(created_at, '%Y-%m-%d %H:%i') AS createdAt " +
                         "FROM errand ORDER BY id DESC";
         return jdbcTemplate.queryForList(sql);
     }
 
-    public int insert(Map<String, Object> e) {
+    public int insert(Map<String, Object> e, int requesterId) {
         String sql =
                 "INSERT INTO errand " +
-                        "(title, reward, from_place, to_place, time_text, status, hashtags, " +
-                        " description, image_path, writer_name, writer_avatar) " +
-                        "VALUES (?, ?, ?, ?, ?, '모집중', ?, ?, ?, ?, ?)";
+                        "(title, reward, from_place, to_place, time_text, status, hashtags, description, image_path, requester_id) " +
+                        "VALUES (?, ?, ?, ?, ?, '모집중', ?, ?, ?, ?)";
 
         return jdbcTemplate.update(sql,
                 e.get("title"),
@@ -41,49 +40,25 @@ public class ErrandDAO {
                 e.get("hashtags"),
                 e.get("description"),
                 e.get("imagePath"),
-                e.get("writerName"),
-                e.get("writerAvatar")
+                requesterId
         );
     }
+
     public Map<String, Object> findById(int id) {
         String sql =
                 "SELECT id, title, reward, " +
                         "from_place AS `from`, to_place AS `to`, time_text AS `time`, " +
-                        "status, hashtags, " +
-                        "description, image_path, writer_name, writer_avatar, " +
+                        "status, hashtags, description, image_path AS imagePath, requester_id AS requesterId, " +
                         "DATE_FORMAT(created_at, '%Y-%m-%d %H:%i') AS createdAt " +
-                        "FROM errand WHERE id = ?";
+                        "FROM errand WHERE id=?";
         return jdbcTemplate.queryForMap(sql, id);
     }
+
     public int updateStatus(int id, String status) {
-        String sql = "UPDATE errand SET status=? WHERE id=?";
-        return jdbcTemplate.update(sql, status, id);
-    }
-
-    public int update(Map<String, Object> e) {
-        String sql =
-                "UPDATE errand SET " +
-                        "title=?, reward=?, from_place=?, to_place=?, time_text=?, hashtags=?, description=?, writer_name=?, image_path=? " +
-                        "WHERE id=?";
-
-        return jdbcTemplate.update(sql,
-                e.get("title"),
-                e.get("reward"),
-                e.get("from"),
-                e.get("to"),
-                e.get("time"),
-                e.get("hashtags"),
-                e.get("description"),
-                e.get("writerName"),
-                e.get("imagePath"),
-                e.get("id")
-        );
+        return jdbcTemplate.update("UPDATE errand SET status=? WHERE id=?", status, id);
     }
 
     public int deleteById(int id) {
-        String sql = "DELETE FROM errand WHERE id=?";
-        return jdbcTemplate.update(sql, id);
+        return jdbcTemplate.update("DELETE FROM errand WHERE id=?", id);
     }
 }
-
-

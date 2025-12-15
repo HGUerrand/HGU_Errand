@@ -15,6 +15,7 @@ public class ErrandVO {
     private String status;
     private String hashtags;          // DB 원본: "#급함,#가벼움"
     private LocalDateTime createdAt;  // DB 원본
+    private int requesterId;
 
     // JSP에서 ${e.hashtags}로 돌리고 싶으면 "가짜 getter" 제공
     public List<String> getHashtags() {
@@ -49,4 +50,7 @@ public class ErrandVO {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public int getRequesterId() { return requesterId; }
+    public void setRequesterId(int requesterId) { this.requesterId = requesterId; }
 }
