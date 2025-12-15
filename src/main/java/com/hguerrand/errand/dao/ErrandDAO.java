@@ -44,21 +44,28 @@ public class ErrandDAO {
         );
     }
 
-    public Map<String, Object> findById(int id) {
-        String sql =
-                "SELECT id, title, reward, " +
-                        "from_place AS `from`, to_place AS `to`, time_text AS `time`, " +
-                        "status, hashtags, description, image_path AS imagePath, requester_id AS requesterId, " +
-                        "DATE_FORMAT(created_at, '%Y-%m-%d %H:%i') AS createdAt " +
-                        "FROM errand WHERE id=?";
-        return jdbcTemplate.queryForMap(sql, id);
-    }
-
     public int updateStatus(int id, String status) {
         return jdbcTemplate.update("UPDATE errand SET status=? WHERE id=?", status, id);
     }
 
     public int deleteById(int id) {
         return jdbcTemplate.update("DELETE FROM errand WHERE id=?", id);
+    }
+
+    public List<Map<String, Object>> findByRequesterId(int requesterId) {
+        String sql =
+                "SELECT id, title, reward, " +
+                        "from_place AS `from`, to_place AS `to`, time_text AS `time`, " +
+                        "status, hashtags, requester_id AS requesterId, " +
+                        "DATE_FORMAT(created_at, '%Y-%m-%d %H:%i') AS createdAt " +
+                        "FROM errand WHERE requester_id=? ORDER BY id DESC";
+        return jdbcTemplate.queryForList(sql, requesterId);
+    }
+
+    public Map<String, Object> findById(int memberId) {
+        String sql =
+                "SELECT member_id, login_id, name, role, status, created_at " +
+                        "FROM member WHERE member_id=?";
+        return jdbcTemplate.queryForMap(sql, memberId);
     }
 }
