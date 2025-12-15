@@ -179,4 +179,12 @@ public class ErrandController {
         errandDAO.deleteById(id);
         return "redirect:/errand/list";
     }
+
+    @Controller
+    public class MyPageController {
+        @GetMapping("/mypage")
+        public String mypage() {
+            return "mypage/index"; // 일단 빈 화면/준비중
+        }
+    }
 }

@@ -233,3 +233,74 @@ a { text-decoration: none; color: inherit; }
     border: 1px solid rgba(107,15,26,0.35);
     font-weight: 1000;
 }
+
+/* =========================
+   Status Action Buttons
+   ========================= */
+
+.ctaRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* 공통 CTA 버튼 */
+.cta {
+    appearance: none;
+    border: none;
+    border-radius: 999px;
+    padding: 8px 14px;
+
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: -0.2px;
+
+    cursor: pointer;
+    white-space: nowrap;
+
+    transition: transform .12s ease,
+    box-shadow .12s ease,
+    background .12s ease;
+}
+
+/* hover 공통 */
+.cta:hover {
+    transform: translateY(-1px);
+}
+
+/* =========================
+   예약 / 완료 (초록 계열)
+   ========================= */
+.cta.green {
+    background: rgba(20, 83, 45, 0.12);
+    color: #14532D;
+    border: 1px solid rgba(20, 83, 45, 0.35);
+}
+
+.cta.green:hover {
+    background: rgba(20, 83, 45, 0.18);
+    box-shadow: 0 6px 14px rgba(20, 83, 45, 0.25);
+}
+
+/* =========================
+   완료 취소 (위험 / 버건디)
+   ========================= */
+.cta.danger {
+    background: rgba(107, 15, 26, 0.12);
+    color: #6B0F1A;
+    border: 1px solid rgba(107, 15, 26, 0.35);
+}
+
+.cta.danger:hover {
+    background: rgba(107, 15, 26, 0.18);
+    box-shadow: 0 6px 14px rgba(107, 15, 26, 0.25);
+}
+
+/* =========================
+   상태 텍스트 (버튼 없을 때)
+   ========================= */
+.ctaRow span {
+    font-size: 12px;
+    font-weight: 900;
+    color: #6B7280;
+}
