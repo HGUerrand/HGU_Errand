@@ -38,7 +38,7 @@
             <!-- 왼쪽: 아바타 + 연필 -->
             <div class="avatarWrap">
                 <img id="avatarImg" class="avatarImg"
-                     src="<%=request.getContextPath()%>/upload/<c:out value='${empty me.avatar ? "default.png" : me.avatar}'/>"
+                     src="<%=request.getContextPath()%>/assets/upload/<c:out value='${empty me.avatar ? "default.png" : me.avatar}'/>"
                      alt="avatar" />
                 <button type="button" class="iconBtn avatarEdit" id="toggleAvatar" title="사진 수정">✎</button>
             </div>
