@@ -65,17 +65,28 @@ public class MyPageController {
             return "redirect:/mypage?toast=avatar";
         }
 
-        String uploadDir = request.getServletContext().getRealPath("/upload");
+        // ✅ 전부 assets/upload 한 폴더로 저장
+        String uploadDir = request.getServletContext().getRealPath("/assets/upload");
+        if (uploadDir == null) throw new IllegalStateException("getRealPath('/assets/upload') returned null");
+
         File dir = new File(uploadDir);
         if (!dir.exists()) dir.mkdirs();
 
-        String savedName = System.currentTimeMillis() + "_" + avatarFile.getOriginalFilename();
-        File dest = new File(uploadDir, savedName);
+        // ✅ 안전한 파일명 (확장자 유지 + UUID)
+        String original = avatarFile.getOriginalFilename();
+        String ext = "";
+        if (original != null && original.contains(".")) {
+            ext = original.substring(original.lastIndexOf("."));
+        }
+        String savedName = System.currentTimeMillis() + "_" + java.util.UUID.randomUUID() + ext;
+
+        File dest = new File(dir, savedName);
         avatarFile.transferTo(dest);
 
+        // ✅ DB에는 savedName만 저장
         memberDAO.updateAvatar(loginMember.getMemberId(), savedName);
 
-        // 세션에도 반영
+        // ✅ 세션 반영
         loginMember.setAvatar(savedName);
         session.setAttribute("loginMember", loginMember);
 
