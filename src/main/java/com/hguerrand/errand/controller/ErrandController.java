@@ -173,7 +173,10 @@ public class ErrandController {
     private void saveImages(int errandId, MultipartFile[] images, HttpServletRequest request) throws Exception {
         if (images == null || images.length == 0) return;
 
-        String uploadDir = request.getServletContext().getRealPath("/upload/errand");
+        // ✅ 전부 assets/upload 한 폴더로 저장
+        String uploadDir = request.getServletContext().getRealPath("/assets/upload");
+        if (uploadDir == null) throw new IllegalStateException("getRealPath('/assets/upload') returned null");
+
         File dir = new File(uploadDir);
         if (!dir.exists()) dir.mkdirs();
 
@@ -182,8 +185,8 @@ public class ErrandController {
         for (MultipartFile mf : images) {
             if (mf == null || mf.isEmpty()) continue;
 
-            String ext = "";
             String original = mf.getOriginalFilename();
+            String ext = "";
             if (original != null && original.contains(".")) {
                 ext = original.substring(original.lastIndexOf("."));
             }
@@ -191,7 +194,9 @@ public class ErrandController {
             String savedName = System.currentTimeMillis() + "_" + UUID.randomUUID() + ext;
             File dest = new File(dir, savedName);
             mf.transferTo(dest);
-            fileNames.add("errand/" + savedName);
+
+            // ✅ DB에는 savedName만 저장
+            fileNames.add(savedName);
         }
 
         if (!fileNames.isEmpty()) {

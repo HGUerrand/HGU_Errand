@@ -125,8 +125,8 @@
                         <button type="button"
                                 class="thumb"
 
-                            data-full="<%=request.getContextPath()%>/upload/${img.imagePath}">
-                            <img src="${pageContext.request.contextPath}/upload/${img.imagePath}"
+                            data-full="<%=request.getContextPath()%>/assets/upload/${img.imagePath}">
+                            <img src="${pageContext.request.contextPath}/assets/upload/${img.imagePath}"
                                  onerror="this.src='${pageContext.request.contextPath}/upload/avatar/default.png'">
                         </button>
                     </c:forEach>
