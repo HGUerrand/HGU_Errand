@@ -23,48 +23,49 @@ public class AuthController {
     }
 
     /* =======================
-       로그인
+       로그인 GET (메시지 출력 담당)
      ======================= */
-
     @GetMapping("/login")
-    public String loginForm() {
+    public String loginForm(@RequestParam(required = false) String error,
+                            Model model) {
+
+        if ("invalid".equals(error)) {
+            model.addAttribute("errorMsg", "아이디 또는 비밀번호가 올바르지 않습니다.");
+        } else if ("notApproved".equals(error)) {
+            model.addAttribute("errorMsg", "관리자 승인 대기중입니다.");
+        } else if ("loginRequired".equals(error)) {
+            model.addAttribute("errorMsg", "로그인이 필요합니다.");
+        }
+
         return "auth/login";
     }
+
 
     @PostMapping("/login")
     public String login(@RequestParam String loginId,
                         @RequestParam String password,
-                        HttpSession session,
-                        Model model) {
+                        HttpSession session) {
 
-        // 1️⃣ 아이디로 회원 조회
         MemberVO member = memberDAO.findByLoginId(loginId);
 
-        // 아이디 없음
-        if (member == null) {
-            model.addAttribute("error", "아이디 또는 비밀번호가 올바르지 않습니다.");
-            return "auth/login";
+        System.out.println("=== 로그인 시도 시작 ===");
+        System.out.println("아이디: " + loginId);
+        if (member != null) {
+            System.out.println("DB에서 가져온 상태값(status): [" + member.getStatus() + "]");
+        } else {
+            System.out.println("해당 아이디의 사용자를 찾을 수 없음");
         }
 
-        // 2️⃣ 비밀번호 불일치
-        if (!member.getPassword().equals(password)) {
-            model.addAttribute("error", "아이디 또는 비밀번호가 올바르지 않습니다.");
-            return "auth/login";
+        if (member == null || !member.getPassword().equals(password)) {
+            return "redirect:/auth/login?error=invalid";
         }
 
-        // 3️⃣ 승인 대기
-        if ("PENDING".equalsIgnoreCase(member.getStatus())) {
-            model.addAttribute("error", "관리자 승인 대기중입니다.");
-            return "auth/login";
+        if (!"APPROVED".equalsIgnoreCase(member.getStatus())) {
+            System.out.println("결과: 승인되지 않은 계정이라 리다이렉트합니다.");
+            return "redirect:/auth/login?error=notApproved";
         }
 
-        // 4️⃣ 승인 거절 (선택)
-        if ("REJECTED".equalsIgnoreCase(member.getStatus())) {
-            model.addAttribute("error", "승인이 거절된 계정입니다.");
-            return "auth/login";
-        }
-
-        // 5️⃣ 로그인 성공
+        System.out.println("결과: 승인된 계정이라 로그인을 허용합니다.");
         session.setAttribute("loginMember", member);
         return "redirect:/errand/list";
     }
@@ -72,7 +73,6 @@ public class AuthController {
     /* =======================
        로그아웃
      ======================= */
-
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
