@@ -34,6 +34,15 @@
         <label class="label">제목</label>
         <input class="input" name="title" placeholder="예) 프린트물 대신 뽑아주기" required />
 
+        <label class="label">연락처</label>
+        <div class="row2">
+            <input class="input"
+                   name="phone"
+                   value="${e.phone}"
+                   placeholder="010-1234-5678"
+                   required />
+        </div>
+
         <div class="row2">
             <div>
                 <label class="label">보수(원)</label>
@@ -66,33 +75,63 @@
         <label class="label">사진 업로드 (선택)</label>
         <input id="imagesInput" class="input" type="file" name="images" accept="image/*" multiple />
 
+        <div id="previewGrid" class="photo-grid"></div>
+
         <ul id="fileList" class="fileList"></ul>
 
         <script>
             const input = document.getElementById('imagesInput');
-            const list = document.getElementById('fileList');
+            const previewGrid = document.getElementById('previewGrid');
 
-            function renderFiles() {
-                list.innerHTML = "";
-                const files = Array.from(input.files);
-                files.forEach((f, idx) => {
-                    const li = document.createElement('li');
-                    li.className = "fileItem";
-                    li.innerHTML = `
-        <span class="fileName">${f.name}</span>
-        <button type="button" class="fileRemove" aria-label="remove">×</button>
-      `;
-                    li.querySelector('.fileRemove').addEventListener('click', () => {
-                        const dt = new DataTransfer();
-                        files.forEach((file, i) => { if (i !== idx) dt.items.add(file); });
-                        input.files = dt.files;
-                        renderFiles();
-                    });
-                    list.appendChild(li);
+            let files = [];
+            let objectUrls = [];
+
+            input.addEventListener('change', () => {
+                cleanupUrls();
+                files = Array.from(input.files);
+                renderPreviews();
+            });
+
+            function renderPreviews() {
+                previewGrid.innerHTML = "";
+
+                files.forEach((file, idx) => {
+                    const wrap = document.createElement('div');
+                    wrap.className = 'thumb-preview';
+
+                    const img = document.createElement('img');
+                    const url = URL.createObjectURL(file);
+                    objectUrls.push(url);
+                    img.src = url;
+
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'thumb-remove';
+                    btn.textContent = '×';
+                    btn.addEventListener('click', () => removeFile(idx));
+
+                    wrap.appendChild(img);
+                    wrap.appendChild(btn);
+                    previewGrid.appendChild(wrap);
                 });
             }
 
-            input.addEventListener('change', renderFiles);
+            function removeFile(removeIdx) {
+                cleanupUrls(); // 미리보기 URL 정리
+
+                files = files.filter((_, idx) => idx !== removeIdx);
+
+                const dt = new DataTransfer();
+                files.forEach(f => dt.items.add(f));
+                input.files = dt.files;
+
+                renderPreviews();
+            }
+
+            function cleanupUrls() {
+                objectUrls.forEach(u => URL.revokeObjectURL(u));
+                objectUrls = [];
+            }
         </script>
 
         <div class="formActions">

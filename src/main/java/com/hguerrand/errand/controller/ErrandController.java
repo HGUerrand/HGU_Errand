@@ -26,23 +26,29 @@ public class ErrandController {
     @GetMapping("/list")
     public String list(
             @RequestParam(required = false) String category,
+            @RequestParam(required = false) String q,
             Model model,
             HttpSession session
     ) {
         MemberVO loginMember = (MemberVO) session.getAttribute("loginMember");
         if (loginMember == null) return "redirect:/auth/login";
 
+        // 검색어/카테고리 정리
+        String cleanQ = (q == null) ? null : q.trim();
+        String cleanCategory = (category == null) ? null : category.trim();
+
         model.addAttribute("loginMember", loginMember);
-        model.addAttribute("errands", errandDAO.findAll(category));
-        model.addAttribute("currentCategory", category);
+        model.addAttribute("errands", errandDAO.findAll(cleanCategory, cleanQ));
+        model.addAttribute("currentCategory", cleanCategory);
+        model.addAttribute("q", cleanQ);
+
         return "errand/list";
     }
 
     /* ===================== 글쓰기 폼 ===================== */
     @GetMapping("/create")
     public String createForm(HttpSession session) {
-        if (session.getAttribute("loginMember") == null)
-            return "redirect:/auth/login";
+        if (session.getAttribute("loginMember") == null) return "redirect:/auth/login";
         return "errand/form";
     }
 
@@ -54,6 +60,7 @@ public class ErrandController {
             @RequestParam("from") String from,
             @RequestParam("to") String to,
             @RequestParam("time") String time,
+            @RequestParam String phone,
             @RequestParam(required = false) String hashtags,
             @RequestParam(required = false) String description,
             @RequestParam(required = false) MultipartFile[] images,
@@ -64,13 +71,21 @@ public class ErrandController {
         MemberVO loginMember = (MemberVO) session.getAttribute("loginMember");
         if (loginMember == null) return "redirect:/auth/login";
 
-        // 1️⃣ 글 먼저 생성
+        String cleanPhone = (phone == null) ? "" : phone.trim();
+        if (cleanPhone.isEmpty()) return "redirect:/errand/create"; // 방어
+
         int errandId = errandDAO.insertAndReturnId(
-                title, reward, from, to, time,
-                hashtags, description, loginMember.getMemberId()
+                title,
+                reward,
+                from,
+                to,
+                time,
+                cleanPhone,
+                hashtags,
+                description,
+                loginMember.getMemberId()
         );
 
-        // 2️⃣ 이미지 저장
         saveImages(errandId, images, request);
 
         return "redirect:/errand/detail?id=" + errandId;
@@ -101,8 +116,10 @@ public class ErrandController {
 
         Map<String, Object> e = errandDAO.findById(id);
         int requesterId = ((Number) e.get("requesterId")).intValue();
-        if (requesterId != loginMember.getMemberId() && !"ADMIN".equals(loginMember.getRole()))
+
+        if (requesterId != loginMember.getMemberId() && !"ADMIN".equals(loginMember.getRole())) {
             return "redirect:/errand/detail?id=" + id;
+        }
 
         model.addAttribute("e", e);
         model.addAttribute("images", errandDAO.findImagesByErrandId(id));
@@ -118,6 +135,7 @@ public class ErrandController {
             @RequestParam("from") String from,
             @RequestParam("to") String to,
             @RequestParam("time") String time,
+            @RequestParam String phone,
             @RequestParam(required = false) String hashtags,
             @RequestParam(required = false) String description,
             @RequestParam(required = false) List<Integer> deleteImageIds,
@@ -131,10 +149,14 @@ public class ErrandController {
 
         Map<String, Object> origin = errandDAO.findById(id);
         int requesterId = ((Number) origin.get("requesterId")).intValue();
-        if (requesterId != loginMember.getMemberId() && !"ADMIN".equals(loginMember.getRole()))
-            return "redirect:/errand/detail?id=" + id;
 
-        // 1️⃣ 본문 수정
+        if (requesterId != loginMember.getMemberId() && !"ADMIN".equals(loginMember.getRole())) {
+            return "redirect:/errand/detail?id=" + id;
+        }
+
+        String cleanPhone = (phone == null) ? "" : phone.trim();
+
+        // 1) 본문 수정 (🔥 phone 반드시 포함)
         Map<String, Object> e = new HashMap<>();
         e.put("id", id);
         e.put("title", title);
@@ -142,18 +164,19 @@ public class ErrandController {
         e.put("from", from);
         e.put("to", to);
         e.put("time", time);
+        e.put("phone", cleanPhone);     // ✅ 핵심!!
         e.put("hashtags", hashtags);
         e.put("description", description);
         errandDAO.updateTextOnly(e);
 
-        // 2️⃣ 이미지 삭제
+        // 2) 이미지 삭제
         if (deleteImageIds != null) {
             for (int imageId : deleteImageIds) {
                 errandDAO.deleteImageById(imageId);
             }
         }
 
-        // 3️⃣ 새 이미지 추가
+        // 3) 새 이미지 추가
         saveImages(id, images, request);
 
         return "redirect:/errand/detail?id=" + id;
@@ -167,8 +190,10 @@ public class ErrandController {
 
         Map<String, Object> e = errandDAO.findById(id);
         int requesterId = ((Number) e.get("requesterId")).intValue();
-        if (requesterId != loginMember.getMemberId() && !"ADMIN".equals(loginMember.getRole()))
+
+        if (requesterId != loginMember.getMemberId() && !"ADMIN".equals(loginMember.getRole())) {
             return "redirect:/errand/detail?id=" + id;
+        }
 
         errandDAO.deleteById(id);
         return "redirect:/errand/list";
@@ -178,7 +203,6 @@ public class ErrandController {
     private void saveImages(int errandId, MultipartFile[] images, HttpServletRequest request) throws Exception {
         if (images == null || images.length == 0) return;
 
-        // ✅ 전부 assets/upload 한 폴더로 저장
         String uploadDir = request.getServletContext().getRealPath("/assets/upload");
         if (uploadDir == null) throw new IllegalStateException("getRealPath('/assets/upload') returned null");
 
@@ -200,7 +224,6 @@ public class ErrandController {
             File dest = new File(dir, savedName);
             mf.transferTo(dest);
 
-            // ✅ DB에는 savedName만 저장
             fileNames.add(savedName);
         }
 

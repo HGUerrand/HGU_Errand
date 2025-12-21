@@ -107,8 +107,8 @@
                         <!-- 작성자 정보 -->
                         <div class="writer-info">
                             <img class="avatar"
-                                src="<%=request.getContextPath()%>/upload/${empty e.writer_avatar ? 'avatar/default.png' : e.writer_avatar}"
-                                onerror="this.src='<%=request.getContextPath()%>/upload/avatar/default.png'" alt="프로필">
+                                src="<%=request.getContextPath()%>/assets/upload/${empty e.writer_avatar ? 'avatar/default.png' : e.writer_avatar}"
+                                onerror="this.src='<%=request.getContextPath()%>/assets/upload/default.png'" alt="프로필">
                             <div class="writer-meta">
                                 <span class="writer-name">
                                     <c:out value="${empty e.writer_name ? '익명' : e.writer_name}" />
@@ -155,7 +155,7 @@
                                         <button type="button" class="thumb"
                                             data-full="<%=request.getContextPath()%>/assets/upload/${img.imagePath}">
                                             <img src="${pageContext.request.contextPath}/assets/upload/${img.imagePath}"
-                                                onerror="this.src='${pageContext.request.contextPath}/upload/avatar/default.png'">
+                                                onerror="this.src='${pageContext.request.contextPath}/assets/upload/default.png'">
                                         </button>
                                     </c:forEach>
                                 </div>
@@ -223,13 +223,34 @@
                             </c:when>
 
                             <c:otherwise>
-                                <a href="<%=request.getContextPath()%>/chat/start?id=${e.id}" class="btn btn-primary"
-                                    style="flex:1; text-align:center;">채팅하기</a>
+                                <div class="btn btn-primary"
+                                     style="flex:1; text-align:center; cursor:pointer;"
+                                     onclick="copyPhone('${e.phone}')">
+                                        ${e.phone}
+                                </div>
                             </c:otherwise>
                         </c:choose>
                     </div>
                 </div>
 
-            </body>
+                <script>
+                    function copyPhone(phone) {
+                        if (!phone) return;
 
+                        const clean = phone.replace(/-/g, '');
+
+                        navigator.clipboard.writeText(clean).then(() => {
+                            alert("전화번호가 복사되었습니다 📋");
+                        }).catch(() => {
+                            const temp = document.createElement("textarea");
+                            temp.value = clean;
+                            document.body.appendChild(temp);
+                            temp.select();
+                            document.execCommand("copy");
+                            document.body.removeChild(temp);
+                            alert("전화번호가 복사되었습니다 📋");
+                        });
+                    }
+                </script>
+            </body>
             </html>
