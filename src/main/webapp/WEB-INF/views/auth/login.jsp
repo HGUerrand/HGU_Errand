@@ -74,15 +74,14 @@
             return;
         }
 
-        // ✅ JSON 말고 form-urlencoded로 전송 (Jackson 필요없음)
-        const body = new URLSearchParams();
-        body.append("credential", credential);
+        // ✅ JSON으로 전송
+        const body = { credential: credential };
 
         fetch("${pageContext.request.contextPath}/auth/google", {
             method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+            headers: { "Content-Type": "application/json;charset=UTF-8" },
             credentials: "same-origin",
-            body: body.toString()
+            body: JSON.stringify(body)
         })
             .then(res => res.json())
             .then(data => {
