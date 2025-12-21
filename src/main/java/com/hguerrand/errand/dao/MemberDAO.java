@@ -86,5 +86,11 @@ public class MemberDAO {
         );
     }
 
+    public int insertGoogleUser(String email) {
+        String sql =
+                "INSERT INTO member (login_id, name, role, status) " +
+                        "VALUES (?, ?, 'USER', 'PENDING')";
 
+        return jdbcTemplate.update(sql, email, email);
+    }
 }

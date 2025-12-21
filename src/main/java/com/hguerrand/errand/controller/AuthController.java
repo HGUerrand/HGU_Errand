@@ -1,5 +1,10 @@
 // src/main/java/com/hguerrand/errand/controller/AuthController.java
 package com.hguerrand.errand.controller;
+import com.hguerrand.errand.util.GoogleTokenVerifier;
+
+import java.util.HashMap;
+import java.util.Map;
+
 
 import com.hguerrand.errand.dao.MemberDAO;
 import com.hguerrand.errand.vo.MemberVO;
@@ -131,4 +136,68 @@ public class AuthController {
             return "auth/signup";
         }
     }
+
+    @PostMapping("/google")
+    @ResponseBody
+    public Map<String, Object> googleLogin(
+            @RequestBody Map<String, String> body,
+            HttpSession session
+    ) {
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+            String credential = body.get("credential");
+            if (credential == null) {
+                result.put("success", false);
+                result.put("message", "Google credential 없음");
+                return result;
+            }
+
+            // 🔐 Google 토큰 검증
+            String email = GoogleTokenVerifier.verifyAndGetEmail(credential);
+
+            if (email == null) {
+                result.put("success", false);
+                result.put("message", "Google 토큰 검증 실패");
+                return result;
+            }
+
+            // 🔥 handong.ac.kr 도메인 제한
+            if (!email.endsWith("@handong.ac.kr")) {
+                result.put("success", false);
+                result.put("message", "handong.ac.kr 계정만 로그인 가능합니다.");
+                return result;
+            }
+
+            // DB에서 회원 조회
+            MemberVO member = memberDAO.findByLoginId(email);
+
+            if (member == null) {
+                // ❗ 처음 로그인 → 자동 회원 생성 (PENDING)
+                memberDAO.insertGoogleUser(email);
+                result.put("success", false);
+                result.put("message", "회원 가입 후 관리자 승인이 필요합니다.");
+                return result;
+            }
+
+            if (!"APPROVED".equalsIgnoreCase(member.getStatus())) {
+                result.put("success", false);
+                result.put("message", "관리자 승인 대기중입니다.");
+                return result;
+            }
+
+            // ✅ 로그인 성공
+            session.setAttribute("loginMember", member);
+            result.put("success", true);
+            return result;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("message", "Google 로그인 실패");
+            return result;
+        }
+    }
+
+
 }
