@@ -79,12 +79,11 @@ public class MemberDAO {
 
     public MemberVO findByLoginId(String loginId) {
         String sql = "SELECT * FROM member WHERE login_id = ?";
-        List<MemberVO> list = jdbcTemplate.query(
+        return jdbcTemplate.queryForObject(
                 sql,
                 new BeanPropertyRowMapper<>(MemberVO.class),
                 loginId
         );
-        return list.isEmpty() ? null : list.get(0);
     }
 
     public int insertGoogleUser(String email) {
@@ -95,9 +94,8 @@ public class MemberDAO {
         return jdbcTemplate.update(
                 sql,
                 email,
-                "GOOGLE_LOGIN",   // 🔥 더미 비밀번호
+                "GOOGLE_LOGIN",
                 email
         );
     }
-
 }

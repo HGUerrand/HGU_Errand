@@ -1,0 +1,105 @@
+/* 전체 공통 */
+section {
+    padding: 100px 20px;
+    text-align: center;
+}
+
+/* HERO */
+.hero-section {
+    height: 100vh;
+    background: linear-gradient(135deg, #f5f2ec, #efe9dd);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-content h1 {
+    font-size: 56px;
+    margin-bottom: 20px;
+}
+
+.hero-content p {
+    font-size: 20px;
+    line-height: 1.6;
+}
+
+.scroll-down {
+    display: inline-block;
+    margin-top: 40px;
+    color: #666;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+/* INTRO */
+.intro-section {
+    background: #ffffff;
+}
+
+.intro-text h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.intro-text p {
+    font-size: 18px;
+    color: #555;
+}
+
+/* FEATURES */
+.feature-section {
+    background: #fafafa;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.feature h3 {
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+
+.feature p {
+    font-size: 16px;
+    color: #666;
+}
+
+/* ABOUT */
+.about-section {
+    background: #ffffff;
+}
+
+.about-desc {
+    margin-bottom: 30px;
+    color: #666;
+}
+
+.creator-box {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    font-size: 18px;
+}
+
+/* CTA */
+.cta-section {
+    background: linear-gradient(135deg, #2f3e2f, #5a2d2d);
+    color: white;
+}
+
+.cta-section h2 {
+    font-size: 32px;
+    margin-bottom: 16px;
+}
+
+.cta-section p {
+    margin-bottom: 30px;
+}
+
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
