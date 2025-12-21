@@ -1,3 +1,4 @@
+// src/main/java/com/hguerrand/errand/interceptor/LoginInterceptor.java
 package com.hguerrand.errand.interceptor;
 
 import com.hguerrand.errand.vo.MemberVO;
@@ -14,12 +15,17 @@ public class LoginInterceptor implements HandlerInterceptor {
                              HttpServletResponse response,
                              Object handler) throws Exception {
 
-        HttpSession session = request.getSession();
-        MemberVO loginMember = (MemberVO) session.getAttribute("loginMember");
+        HttpSession session = request.getSession(false);
+        MemberVO loginMember =
+                (session == null) ? null : (MemberVO) session.getAttribute("loginMember");
+
         if (loginMember == null) {
-            response.sendRedirect(request.getContextPath() + "/auth/login");
+            response.sendRedirect(
+                    request.getContextPath() + "/auth/login?error=loginRequired"
+            );
             return false;
         }
+
         return true;
     }
 }

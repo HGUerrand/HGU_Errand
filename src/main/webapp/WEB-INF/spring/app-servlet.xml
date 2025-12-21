@@ -26,16 +26,18 @@
             <mvc:mapping path="/errand/**"/>
             <mvc:mapping path="/application/**"/>
             <mvc:mapping path="/chat/**"/>
-            <mvc:mapping path="/mypage/**"/>
             <mvc:mapping path="/admin/**"/>
 
-            <!-- 로그인 없이 허용 -->
-            <mvc:exclude-mapping path="/auth/**"/>
+            <!-- 🔥 로그인 없이 허용 -->
+            <mvc:exclude-mapping path="/auth/login"/>
+            <mvc:exclude-mapping path="/auth/signup"/>
+            <mvc:exclude-mapping path="/auth/google"/>
             <mvc:exclude-mapping path="/assets/**"/>
 
             <bean class="com.hguerrand.errand.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
+
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/views/"/>

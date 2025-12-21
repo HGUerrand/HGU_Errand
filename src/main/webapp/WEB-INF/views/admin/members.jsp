@@ -47,8 +47,8 @@
         </div>
     </c:forEach>
 
-    <a class="back" href="${pageContext.request.contextPath}/">
-        ← 홈으로
+    <a class="back" href="${pageContext.request.contextPath}/errand/list">
+        ← 홈페이지
     </a>
 </div>
 
