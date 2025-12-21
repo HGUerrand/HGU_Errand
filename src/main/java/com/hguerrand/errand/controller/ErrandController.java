@@ -96,7 +96,7 @@ public class ErrandController {
 
         Map<String, Object> e = errandDAO.findById(id);
         int requesterId = ((Number) e.get("requesterId")).intValue();
-        if (requesterId != loginMember.getMemberId())
+        if (requesterId != loginMember.getMemberId() && !"ADMIN".equals(loginMember.getRole()))
             return "redirect:/errand/detail?id=" + id;
 
         model.addAttribute("e", e);
@@ -126,7 +126,7 @@ public class ErrandController {
 
         Map<String, Object> origin = errandDAO.findById(id);
         int requesterId = ((Number) origin.get("requesterId")).intValue();
-        if (requesterId != loginMember.getMemberId())
+        if (requesterId != loginMember.getMemberId() && !"ADMIN".equals(loginMember.getRole()))
             return "redirect:/errand/detail?id=" + id;
 
         // 1️⃣ 본문 수정
@@ -162,7 +162,7 @@ public class ErrandController {
 
         Map<String, Object> e = errandDAO.findById(id);
         int requesterId = ((Number) e.get("requesterId")).intValue();
-        if (requesterId != loginMember.getMemberId())
+        if (requesterId != loginMember.getMemberId() && !"ADMIN".equals(loginMember.getRole()))
             return "redirect:/errand/detail?id=" + id;
 
         errandDAO.deleteById(id);
