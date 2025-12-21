@@ -46,22 +46,19 @@
                         </div>
                     </div>
 
-                    <!-- Search (UI only) -->
-                    <div class="searchbar">
-                        <input placeholder="제목/장소로 검색" />
-                        <button type="button" class="chip active">전체</button>
-                    </div>
+                    <!-- Search -->
+                    <form class="searchbar" method="get" action="${pageContext.request.contextPath}/errand/list">
+                        <input name="q" value="${param.q}" placeholder="제목/설명/장소/해시태그로 검색" />
+                        <input type="hidden" name="category" value="${param.category}" />
+                        <button type="submit" class="chip active">검색</button>
+                    </form>
 
                     <!-- Filters (UI only) -->
                     <div class="filters">
-                        <a href="?category=recruiting"
-                            class="chip ${currentCategory == 'recruiting' ? 'active' : ''}">모집중</a>
-                        <a href="?category=urgent" class="chip ${currentCategory == 'urgent' ? 'active' : ''}">마감임박</a>
-                        <a href="?category=errand" class="chip ${currentCategory == 'errand' ? 'active' : ''}">심부름</a>
-                        <a href="?category=purchase"
-                            class="chip ${currentCategory == 'purchase' ? 'active' : ''}">대리구매</a>
-                        <a href="?category=pickup" class="chip ${currentCategory == 'pickup' ? 'active' : ''}">픽업</a>
-                        <a href="?category=" class="chip ${empty currentCategory ? 'active' : ''}">전체</a>
+                        <a href="?category=low&q=${fn:escapeXml(param.q)}"  class="chip ${currentCategory=='low'?'active':''}">~2,000</a>
+                        <a href="?category=mid&q=${fn:escapeXml(param.q)}"  class="chip ${currentCategory=='mid'?'active':''}">2,000~5,000</a>
+                        <a href="?category=high&q=${fn:escapeXml(param.q)}" class="chip ${currentCategory=='high'?'active':''}">5,000+</a>
+                        <a href="?category=&q=${fn:escapeXml(param.q)}" class="chip ${empty currentCategory?'active':''}">전체</a>
                     </div>
 
                     <!-- Grid -->

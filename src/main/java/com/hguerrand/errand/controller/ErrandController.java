@@ -26,6 +26,7 @@ public class ErrandController {
     @GetMapping("/list")
     public String list(
             @RequestParam(required = false) String category,
+            @RequestParam(required = false) String q,
             Model model,
             HttpSession session
     ) {
@@ -33,8 +34,9 @@ public class ErrandController {
         if (loginMember == null) return "redirect:/auth/login";
 
         model.addAttribute("loginMember", loginMember);
-        model.addAttribute("errands", errandDAO.findAll(category));
+        model.addAttribute("errands", errandDAO.findAll(category, q)); // ✅ 변경
         model.addAttribute("currentCategory", category);
+        model.addAttribute("q", q);
         return "errand/list";
     }
 

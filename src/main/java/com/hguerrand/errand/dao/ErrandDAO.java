@@ -12,6 +12,9 @@ import org.springframework.jdbc.support.KeyHolder;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Repository
 public class ErrandDAO {
 
@@ -20,29 +23,50 @@ public class ErrandDAO {
     public ErrandDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-
     public List<Map<String, Object>> findAll(String category) {
-        String sql = "SELECT id, title, reward, " +
-                "from_place AS `from`, to_place AS `to`, time_text AS `time`, " +
-                "status, hashtags, description, requester_id AS requesterId, " +
-                "DATE_FORMAT(created_at, '%Y-%m-%d %H:%i') AS createdAt " +
-                "FROM errand ";
+        return findAll(category, null);
+    }
 
-        if ("recruiting".equals(category)) {
-            sql += "WHERE status = '모집중' ";
-        } else if ("urgent".equals(category)) {
-            sql += "WHERE hashtags LIKE '%마감임박%' ";
-        } else if ("errand".equals(category)) {
-            sql += "WHERE hashtags LIKE '%심부름%' ";
-        } else if ("purchase".equals(category)) {
-            sql += "WHERE hashtags LIKE '%대리구매%' ";
-        } else if ("pickup".equals(category)) {
-            sql += "WHERE hashtags LIKE '%픽업%' ";
+    public List<Map<String, Object>> findAll(String category, String q) {
+        StringBuilder sql = new StringBuilder(
+                "SELECT id, title, reward, " +
+                        "from_place AS `from`, to_place AS `to`, time_text AS `time`, " +
+                        "status, hashtags, description, requester_id AS requesterId, " +
+                        "DATE_FORMAT(created_at, '%Y-%m-%d %H:%i') AS createdAt " +
+                        "FROM errand WHERE 1=1 "
+        );
+
+        List<Object> params = new ArrayList<>();
+
+        if ("low".equals(category)) {
+            sql.append("AND reward BETWEEN 0 AND 2000 ");
+        } else if ("mid".equals(category)) {
+            sql.append("AND reward BETWEEN 2000 AND 5000 ");
+        } else if ("high".equals(category)) {
+            sql.append("AND reward >= 5000 ");
         }
 
-        sql += "ORDER BY id DESC";
+        // ✅ 검색어
+        if (q != null && !q.trim().isEmpty()) {
+            sql.append("AND (");
+            sql.append(" title LIKE ? ");
+            sql.append(" OR description LIKE ? ");
+            sql.append(" OR from_place LIKE ? ");
+            sql.append(" OR to_place LIKE ? ");
+            sql.append(" OR hashtags LIKE ? ");
+            sql.append(") ");
 
-        return jdbcTemplate.queryForList(sql);
+            String like = "%" + q.trim() + "%";
+            params.add(like);
+            params.add(like);
+            params.add(like);
+            params.add(like);
+            params.add(like);
+        }
+
+        sql.append("ORDER BY id DESC");
+
+        return jdbcTemplate.queryForList(sql.toString(), params.toArray());
     }
 
     public int insert(Map<String, Object> e, int requesterId) {
