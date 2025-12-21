@@ -223,13 +223,34 @@
                             </c:when>
 
                             <c:otherwise>
-                                <a href="<%=request.getContextPath()%>/chat/start?id=${e.id}" class="btn btn-primary"
-                                    style="flex:1; text-align:center;">채팅하기</a>
+                                <div class="btn btn-primary"
+                                     style="flex:1; text-align:center; cursor:pointer;"
+                                     onclick="copyPhone('${e.phone}')">
+                                        ${e.phone}
+                                </div>
                             </c:otherwise>
                         </c:choose>
                     </div>
                 </div>
 
-            </body>
+                <script>
+                    function copyPhone(phone) {
+                        if (!phone) return;
 
+                        const clean = phone.replace(/-/g, '');
+
+                        navigator.clipboard.writeText(clean).then(() => {
+                            alert("전화번호가 복사되었습니다 📋");
+                        }).catch(() => {
+                            const temp = document.createElement("textarea");
+                            temp.value = clean;
+                            document.body.appendChild(temp);
+                            temp.select();
+                            document.execCommand("copy");
+                            document.body.removeChild(temp);
+                            alert("전화번호가 복사되었습니다 📋");
+                        });
+                    }
+                </script>
+            </body>
             </html>

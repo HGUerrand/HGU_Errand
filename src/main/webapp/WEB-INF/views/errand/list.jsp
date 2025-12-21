@@ -31,9 +31,6 @@
             <div class="actions">
                 <a class="btn" href="<%=request.getContextPath()%>/">홈</a>
 
-                <!-- 채팅 목록 -->
-                <a class="btn" href="<%=request.getContextPath()%>/chat/list">채팅</a>
-
                 <!-- 마이페이지 -->
                 <a class="btn" href="<%=request.getContextPath()%>/mypage">마이</a>
 

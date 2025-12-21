@@ -126,3 +126,54 @@
     max-width: 900px;
 }
 
+/* ===== 이미지 미리보기 썸네일 (detail의 .thumb 스타일 그대로) ===== */
+.photo-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+}
+
+/* detail 페이지 thumb와 동일 */
+.thumb-preview{
+    position: relative;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: default;
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+.thumb-preview img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* 우측 상단 X 버튼 */
+.thumb-remove{
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,0.65);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.thumb-remove:hover{
+    background: rgba(0,0,0,0.85);
+}

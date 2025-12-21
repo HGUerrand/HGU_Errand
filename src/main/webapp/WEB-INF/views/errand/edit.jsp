@@ -35,6 +35,15 @@
         <label class="label">제목</label>
         <input class="input" name="title" value="${e.title}" required />
 
+        <label class="label">연락처</label>
+        <div class="row2">
+        <input class="input"
+               name="phone"
+               value="${e.phone}"
+               placeholder="010-1234-5678"
+               required />
+        </div>
+
         <div class="row2">
             <div>
                 <label class="label">보수(원)</label>
@@ -65,25 +74,29 @@
 
         <!-- ✅ 기존 사진 -->
         <c:if test="${not empty images}">
-            <label class="label">기존 사진 (삭제할 것 선택)</label>
-            <div class="editPhotosGrid">
-                <c:forEach var="img" items="${images}">
-                    <label class="editThumb" style="position:relative; display:block;">
-                        <img src="<%=request.getContextPath()%>/upload/${img.imagePath}" alt="첨부">
+            <label class="label">기존 사진</label>
 
-                        <input type="checkbox" name="deleteImageIds" value="${img.imageId}"
-                               style="position:absolute; top:8px; left:8px; transform:scale(1.2);">
-                    </label>
+            <div id="existingGrid" class="photo-grid">
+                <c:forEach var="img" items="${images}">
+                    <div class="thumb-preview existing-thumb" data-image-id="${img.imageId}">
+                        <img
+                                src="${pageContext.request.contextPath}/assets/upload/${img.imagePath}"
+                                onerror="this.src='${pageContext.request.contextPath}/assets/upload/default.png'"
+                                alt="첨부">
+                        <button type="button" class="thumb-remove existing-remove" aria-label="remove">×</button>
+                    </div>
                 </c:forEach>
             </div>
-            <div style="margin-top:8px; font-size:12px; color:#6B7280; font-weight:800;">
-                체크된 사진은 저장 시 삭제됩니다.
-            </div>
+
+            <!-- X 누르면 여기에 hidden이 쌓임 -->
+            <div id="deleteHiddenBox"></div>
         </c:if>
 
         <!-- ✅ 새 사진 추가 -->
         <label class="label">새 사진 추가</label>
-        <input class="input" type="file" name="images" accept="image/*" multiple />
+        <input id="editImagesInput" class="input" type="file" name="images" accept="image/*" multiple />
+
+        <div id="editPreviewGrid" class="photo-grid"></div>
 
         <div class="formActions">
             <a class="btn" href="<%=request.getContextPath()%>/errand/detail?id=${e.id}">취소</a>
@@ -93,5 +106,89 @@
     </form>
 
 </div>
+<script>
+    const editInput = document.getElementById('editImagesInput');
+    const editPreviewGrid = document.getElementById('editPreviewGrid');
+
+    let editFiles = [];
+    let editObjectUrls = [];
+
+    editInput.addEventListener('change', () => {
+        cleanupEditUrls();
+        editFiles = Array.from(editInput.files);
+        renderEditPreviews();
+    });
+
+    function renderEditPreviews() {
+        editPreviewGrid.innerHTML = "";
+
+        editFiles.forEach((file, idx) => {
+            const wrap = document.createElement('div');
+            wrap.className = 'thumb-preview';
+
+            const img = document.createElement('img');
+            const url = URL.createObjectURL(file);
+            editObjectUrls.push(url);
+            img.src = url;
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'thumb-remove';
+            btn.textContent = '×';
+            btn.addEventListener('click', () => removeEditFile(idx));
+
+            wrap.appendChild(img);
+            wrap.appendChild(btn);
+            editPreviewGrid.appendChild(wrap);
+        });
+    }
+
+    function removeEditFile(removeIdx) {
+        cleanupEditUrls();
+
+        editFiles = editFiles.filter((_, idx) => idx !== removeIdx);
+
+        const dt = new DataTransfer();
+        editFiles.forEach(f => dt.items.add(f));
+        editInput.files = dt.files;
+
+        renderEditPreviews();
+    }
+
+    function cleanupEditUrls() {
+        editObjectUrls.forEach(u => URL.revokeObjectURL(u));
+        editObjectUrls = [];
+    }
+</script>
+<script>
+    // ===== 기존 사진: X 누르면 바로 화면에서 제거 + deleteImageIds 추가 =====
+    const existingGrid = document.getElementById('existingGrid');
+    const deleteHiddenBox = document.getElementById('deleteHiddenBox');
+
+    if (existingGrid) {
+        existingGrid.addEventListener('click', (e) => {
+            const btn = e.target.closest('.existing-remove');
+            if (!btn) return;
+
+            const thumb = btn.closest('.existing-thumb');
+            if (!thumb) return;
+
+            const imageId = thumb.dataset.imageId;
+            if (!imageId) return;
+
+            // hidden input 추가 (중복 방지)
+            if (!deleteHiddenBox.querySelector(`input[name="deleteImageIds"][value="${imageId}"]`)) {
+                const hidden = document.createElement('input');
+                hidden.type = 'hidden';
+                hidden.name = 'deleteImageIds';
+                hidden.value = imageId;
+                deleteHiddenBox.appendChild(hidden);
+            }
+
+            // 화면에서 즉시 제거 (새 사진 X랑 동일 UX)
+            thumb.remove();
+        });
+    }
+</script>
 </body>
 </html>
