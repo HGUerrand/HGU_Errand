@@ -190,8 +190,8 @@ body{
 
 /* 예약 (중간 톤) */
 .card.reservedCard {
-    opacity: 0.75;
-    filter: grayscale(0.15);
+    opacity: 0.55;
+    filter: grayscale(0.35);
 }
 
 .topRight{

@@ -107,8 +107,8 @@
                         <!-- 작성자 정보 -->
                         <div class="writer-info">
                             <img class="avatar"
-                                src="<%=request.getContextPath()%>/upload/${empty e.writer_avatar ? 'avatar/default.png' : e.writer_avatar}"
-                                onerror="this.src='<%=request.getContextPath()%>/upload/avatar/default.png'" alt="프로필">
+                                src="<%=request.getContextPath()%>/assets/upload/${empty e.writer_avatar ? 'avatar/default.png' : e.writer_avatar}"
+                                onerror="this.src='<%=request.getContextPath()%>/assets/upload/default.png'" alt="프로필">
                             <div class="writer-meta">
                                 <span class="writer-name">
                                     <c:out value="${empty e.writer_name ? '익명' : e.writer_name}" />
@@ -155,7 +155,7 @@
                                         <button type="button" class="thumb"
                                             data-full="<%=request.getContextPath()%>/assets/upload/${img.imagePath}">
                                             <img src="${pageContext.request.contextPath}/assets/upload/${img.imagePath}"
-                                                onerror="this.src='${pageContext.request.contextPath}/upload/avatar/default.png'">
+                                                onerror="this.src='${pageContext.request.contextPath}/assets/upload/default.png'">
                                         </button>
                                     </c:forEach>
                                 </div>
