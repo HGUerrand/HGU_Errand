@@ -182,9 +182,16 @@ body{
     box-shadow:0 22px 36px rgba(0,0,0,0.12);
 }
 
-.card.doneCard{
-    opacity:0.55;
-    filter:grayscale(0.35);
+/* 완료 (가장 흐림) */
+.card.doneCard {
+    opacity: 0.55;
+    filter: grayscale(0.35);
+}
+
+/* 예약 (중간 톤) */
+.card.reservedCard {
+    opacity: 0.75;
+    filter: grayscale(0.15);
 }
 
 .topRight{
