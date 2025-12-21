@@ -21,13 +21,27 @@ public class ErrandDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Map<String, Object>> findAll() {
-        String sql =
-                "SELECT id, title, reward, " +
-                        "from_place AS `from`, to_place AS `to`, time_text AS `time`, " +
-                        "status, hashtags, description, requester_id AS requesterId, " +
-                        "DATE_FORMAT(created_at, '%Y-%m-%d %H:%i') AS createdAt " +
-                        "FROM errand ORDER BY id DESC";
+    public List<Map<String, Object>> findAll(String category) {
+        String sql = "SELECT id, title, reward, " +
+                "from_place AS `from`, to_place AS `to`, time_text AS `time`, " +
+                "status, hashtags, description, requester_id AS requesterId, " +
+                "DATE_FORMAT(created_at, '%Y-%m-%d %H:%i') AS createdAt " +
+                "FROM errand ";
+
+        if ("recruiting".equals(category)) {
+            sql += "WHERE status = '모집중' ";
+        } else if ("urgent".equals(category)) {
+            sql += "WHERE hashtags LIKE '%마감임박%' ";
+        } else if ("errand".equals(category)) {
+            sql += "WHERE hashtags LIKE '%심부름%' ";
+        } else if ("purchase".equals(category)) {
+            sql += "WHERE hashtags LIKE '%대리구매%' ";
+        } else if ("pickup".equals(category)) {
+            sql += "WHERE hashtags LIKE '%픽업%' ";
+        }
+
+        sql += "ORDER BY id DESC";
+
         return jdbcTemplate.queryForList(sql);
     }
 

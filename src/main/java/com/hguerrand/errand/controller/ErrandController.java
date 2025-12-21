@@ -24,12 +24,17 @@ public class ErrandController {
 
     /* ===================== 리스트 ===================== */
     @GetMapping("/list")
-    public String list(Model model, HttpSession session) {
+    public String list(
+            @RequestParam(required = false) String category,
+            Model model,
+            HttpSession session
+    ) {
         MemberVO loginMember = (MemberVO) session.getAttribute("loginMember");
         if (loginMember == null) return "redirect:/auth/login";
 
         model.addAttribute("loginMember", loginMember);
-        model.addAttribute("errands", errandDAO.findAll());
+        model.addAttribute("errands", errandDAO.findAll(category));
+        model.addAttribute("currentCategory", category);
         return "errand/list";
     }
 
