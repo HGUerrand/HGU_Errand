@@ -25,7 +25,6 @@ public class GoogleTokenVerifier {
             if (idToken == null) return null;
 
             return idToken.getPayload().getEmail();
-
         } catch (Exception e) {
             e.printStackTrace();
             return null;

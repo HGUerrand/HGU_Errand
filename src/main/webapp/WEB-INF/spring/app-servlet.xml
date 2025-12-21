@@ -28,10 +28,10 @@
             <mvc:mapping path="/chat/**"/>
             <mvc:mapping path="/admin/**"/>
 
-            <!-- 로그인 없이 허용 -->
-            <mvc:exclude-mapping path="/"/>
-            <mvc:exclude-mapping path="/index.jsp"/>
-            <mvc:exclude-mapping path="/auth/**"/>
+            <!-- 🔥 로그인 없이 허용 -->
+            <mvc:exclude-mapping path="/auth/login"/>
+            <mvc:exclude-mapping path="/auth/signup"/>
+            <mvc:exclude-mapping path="/auth/google"/>
             <mvc:exclude-mapping path="/assets/**"/>
 
             <bean class="com.hguerrand.errand.interceptor.LoginInterceptor"/>

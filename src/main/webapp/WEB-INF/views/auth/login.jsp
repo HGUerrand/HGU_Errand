@@ -18,12 +18,11 @@
     <div class="auth-card">
         <div class="auth-title">로그인</div>
 
-        <!-- 🔥 Google Login -->
-        <div style="margin-bottom:20px; text-align:center;">
+        <div style="margin: 0 0 18px 0; display:flex; justify-content:center;">
             <div id="google-login"></div>
         </div>
 
-        <!-- 🔥 에러 메시지 -->
+        <!-- 에러 메시지 -->
         <c:if test="${not empty errorMsg}">
             <div class="auth-error">
                     ${errorMsg}
@@ -52,10 +51,11 @@
     </div>
 </div>
 
-<!-- Google Script -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
     window.onload = function () {
+        if (!window.google || !google.accounts || !google.accounts.id) return;
+
         google.accounts.id.initialize({
             client_id: "936294527684-ppn525f19crtp39da5te6kl73q2p19gs.apps.googleusercontent.com",
             callback: handleGoogleLogin
@@ -68,20 +68,34 @@
     };
 
     function handleGoogleLogin(response) {
+        const credential = response && response.credential ? response.credential : "";
+        if (!credential) {
+            alert("Google credential이 없습니다.");
+            return;
+        }
+
+        // ✅ JSON 말고 form-urlencoded로 전송 (Jackson 필요없음)
+        const body = new URLSearchParams();
+        body.append("credential", credential);
+
         fetch("${pageContext.request.contextPath}/auth/google", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ credential: response.credential })
+            headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+            credentials: "same-origin",
+            body: body.toString()
         })
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
                     location.href = "${pageContext.request.contextPath}/errand/list";
                 } else {
-                    alert(data.message);
+                    alert(data.message || "Google 로그인 실패");
                 }
             })
-            .catch(() => alert("Google 로그인 실패"));
+            .catch((e) => {
+                console.error(e);
+                alert("Google 로그인 실패");
+            });
     }
 </script>
 
